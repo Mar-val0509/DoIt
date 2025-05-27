@@ -24,6 +24,7 @@
         android:backgroundTint="@color/verde"/>
 
 
+
     <TextView
         android:id="@+id/txtDistance"
         android:layout_width="wrap_content"
@@ -68,6 +69,32 @@
         android:layout_marginTop="12dp"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:id="@+id/btnPause"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pausar carrera"
+        android:layout_below="@id/txtPace"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/blanco_roto"
+
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/txtCountdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:textColor="@color/rojo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/btnPause"
+        android:visibility="gone"/>
+
+
+
     <TextView
         android:id="@+id/txtChrono"
         android:layout_width="wrap_content"
@@ -86,11 +113,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:backgroundTint="@color/rojo"
-        android:layout_above="@id/btnVolver"
+        android:layout_above="@id/btnBack"
         android:text="Detener carrera" />
 
     <Button
-        android:id="@+id/btnVolver"
+        android:id="@+id/btnBack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Volver"

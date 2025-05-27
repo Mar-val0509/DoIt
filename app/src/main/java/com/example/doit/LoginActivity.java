@@ -2,8 +2,10 @@ package com.example.doit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailInput, passwordInput;
     private Button loginBtn, goToRegisterBtn;
     private FirebaseAuth mAuth;
+    private DoItDBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,22 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.inputPassword);
         loginBtn = findViewById(R.id.btnLogin);
         goToRegisterBtn = findViewById(R.id.btnGoRegister);
+        ImageButton btnTogglePassword = findViewById(R.id.btnTogglePassword);
+
+        btnTogglePassword.setOnClickListener(v -> {
+            if (passwordInput.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
+                // Mostrar contraseña
+                passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnTogglePassword.setImageResource(R.drawable.ic_visibility);
+            } else {
+                // Ocultar contraseña
+                passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnTogglePassword.setImageResource(R.drawable.ic_visibility_off);
+            }
+            // Mover el cursor al final
+            passwordInput.setSelection(passwordInput.getText().length());
+        });
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -62,9 +81,17 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        mAuth = FirebaseAuth.getInstance(); // Asegúrate de tener esto también
+        dbHelper = new DoItDBHelper(this);  // <---- ¡AÑADE ESTA LÍNEA!
+
         if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(this, HomeActivity.class));
-            finish();
+            String uid = mAuth.getCurrentUser().getUid();
+            if (dbHelper.existeUsuario(uid)) {
+                startActivity(new Intent(this, HomeActivity.class));
+                finish();
+            }
         }
     }
+
 }

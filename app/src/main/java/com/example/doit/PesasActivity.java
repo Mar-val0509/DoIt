@@ -5,16 +5,13 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
+import android.view.ViewGroup;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class PesasActivity extends AppCompatActivity {
 
@@ -27,113 +24,154 @@ public class PesasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pesas);
 
-        setupBottomNav();
-
         layoutRutinas = findViewById(R.id.layoutRutinas);
         dbHelper = new DoItDBHelper(this);
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Evento de "Agregar rutina"
-        LinearLayout cardAgregarRutina = findViewById(R.id.cardAgregarRutina);
-        cardAgregarRutina.setOnClickListener(v -> {
-            startActivity(new Intent(this, CrearRutinaActivity.class));
+        setupHeader();
+        cargarRutinas();
+        setupBottomNav();
+
+        Button btnHistorial = findViewById(R.id.btnHistorial);
+        btnHistorial.setOnClickListener(v -> {
+            Intent intent = new Intent(PesasActivity.this, HistorialEntrenamientosActivity.class);
+            startActivity(intent);
         });
 
-        cargarRutinasDesdeDB();
     }
 
-    private void cargarRutinasDesdeDB() {
-        List<View> tarjetas = new ArrayList<>();
-        Cursor cursor = dbHelper.obtenerRutinasPorUsuario(uid);
+    private void setupHeader() {
+        LinearLayout headerRow = (LinearLayout) layoutRutinas.getChildAt(0);
+        LinearLayout cardAgregarRutina = headerRow.findViewById(R.id.cardAgregarRutina);
 
-        while (cursor.moveToNext()) {
-            int id = cursor.getInt(0);
-            String nombre = cursor.getString(1);
-            String ejercicios = String.join(", ", dbHelper.obtenerNombresEjerciciosDeRutina(id));
-            tarjetas.add(crearTarjeta(nombre, ejercicios));
+        cardAgregarRutina.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CrearRutinaActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void cargarRutinas() {
+        Cursor cursor = dbHelper.obtenerRutinasPorUsuarioDisplay(uid);
+        if (cursor == null || !cursor.moveToFirst()) return;
+
+        // Borra todas las vistas excepto el primer hijo (la tarjeta "Añadir rutina")
+        if (layoutRutinas.getChildCount() > 1) {
+            layoutRutinas.removeViews(1, layoutRutinas.getChildCount() - 1);
+        }
+
+        LinearLayout fila = new LinearLayout(this);
+        fila.setOrientation(LinearLayout.HORIZONTAL);
+        fila.setWeightSum(2);
+        fila.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+
+        int contador = 0;
+
+        do {
+            int idRutina = cursor.getInt(cursor.getColumnIndexOrThrow("id_entrenamiento"));
+            String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"));
+            String descripcion = cursor.getString(cursor.getColumnIndexOrThrow("descripcion"));
+
+            LinearLayout tarjeta = crearTarjetaRutina(idRutina, nombre, descripcion);
+            fila.addView(tarjeta);
+            contador++;
+
+            if (contador % 2 == 0) {
+                layoutRutinas.addView(fila);
+                fila = new LinearLayout(this);
+                fila.setOrientation(LinearLayout.HORIZONTAL);
+                fila.setWeightSum(2);
+                fila.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                ));
+            }
+
+        } while (cursor.moveToNext());
+
+        // Añadir última fila si quedó incompleta
+        if (fila.getChildCount() > 0) {
+            layoutRutinas.addView(fila);
         }
 
         cursor.close();
-
-        // Insertar tarjetas de 2 en 2
-        for (int i = 0; i < tarjetas.size(); i += 2) {
-            LinearLayout fila = new LinearLayout(this);
-            fila.setOrientation(LinearLayout.HORIZONTAL);
-            fila.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            ));
-            fila.setPadding(0, 0, 0, 16);
-
-            fila.addView(tarjetas.get(i));
-
-            if (i + 1 < tarjetas.size()) {
-                fila.addView(tarjetas.get(i + 1));
-            } else {
-                View espacio = new View(this);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, 0, 1);
-                espacio.setLayoutParams(lp);
-                fila.addView(espacio);
-            }
-
-            layoutRutinas.addView(fila);
-        }
     }
 
-    private View crearTarjeta(String nombre, String descripcion) {
+
+    private LinearLayout crearTarjetaRutina(int idRutina, String nombre, String descripcion) {
         LinearLayout tarjeta = new LinearLayout(this);
         tarjeta.setOrientation(LinearLayout.VERTICAL);
-        tarjeta.setPadding(16, 16, 16, 16);
-        tarjeta.setGravity(Gravity.START);
-        tarjeta.setBackgroundResource(R.drawable.card_background);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, 160);
-        params.weight = 1;
-        params.setMargins(8, 0, 8, 0);
+        tarjeta.setPadding(dpToPx(12), dpToPx(12), dpToPx(12), dpToPx(12));
+        tarjeta.setBackground(ContextCompat.getDrawable(this, R.drawable.card_background));
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, dpToPx(160), 1);
+        params.setMargins(dpToPx(8), 0, dpToPx(8), dpToPx(16));
         tarjeta.setLayoutParams(params);
+        tarjeta.setGravity(Gravity.START | Gravity.TOP);
 
-        TextView txtNombre = new TextView(this);
-        txtNombre.setText(nombre);
-        txtNombre.setTextSize(16);
-        txtNombre.setTextColor(getResources().getColor(android.R.color.black));
-        txtNombre.setPadding(0, 0, 0, 8);
-        txtNombre.setTypeface(null, android.graphics.Typeface.BOLD);
+        TextView titulo = new TextView(this);
+        titulo.setText(nombre);
+        titulo.setTextSize(16);
+        titulo.setTextColor(getResources().getColor(R.color.black));
+        titulo.setGravity(Gravity.START);
+        titulo.setMaxLines(1);
 
-        TextView txtDescripcion = new TextView(this);
-        txtDescripcion.setText(descripcion);
-        txtDescripcion.setTextSize(14);
-        txtDescripcion.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        TextView desc = new TextView(this);
+        desc.setText(descripcion);
+        desc.setTextSize(12);
+        desc.setTextColor(getResources().getColor(R.color.gris));
+        desc.setGravity(Gravity.START);
+        desc.setMaxLines(2);
 
-        tarjeta.addView(txtNombre);
-        tarjeta.addView(txtDescripcion);
+        tarjeta.addView(titulo);
+        tarjeta.addView(desc);
+
+        tarjeta.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RutinaActivity.class);
+            intent.putExtra("id_entrenamiento", idRutina);
+            startActivity(intent);
+        });
 
         return tarjeta;
     }
 
+
+
+    private int dpToPx(int dp) {
+        return Math.round(dp * getResources().getDisplayMetrics().density);
+    }
+
     private void setupBottomNav() {
-        findViewById(R.id.navInicio).setOnClickListener(v -> {
-            startActivity(new Intent(this, HomeActivity.class));
-            finish();
-        });
+        findViewById(R.id.navInicio).setOnClickListener(v ->
+                startActivity(new Intent(this, HomeActivity.class)));
 
-        findViewById(R.id.navPesas).setOnClickListener(v -> {
-            startActivity(new Intent(this, PesasActivity.class));
-            finish();
-        });
+        findViewById(R.id.navRunning).setOnClickListener(v ->
+                startActivity(new Intent(this, RunningActivity.class)));
 
-        findViewById(R.id.navRunning).setOnClickListener(v -> {
-            startActivity(new Intent(this, RunningActivity.class));
-            finish();
-        });
-
-        findViewById(R.id.navPerfil).setOnClickListener(v -> {
-            startActivity(new Intent(this, PerfilActivity.class));
-            finish();
-        });
+        findViewById(R.id.navPerfil).setOnClickListener(v ->
+                startActivity(new Intent(this, PerfilActivity.class)));
 
         findViewById(R.id.navSalir).setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, LoginActivity.class));
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             finish();
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Borra solo las rutinas dinámicas, deja el botón
+        if (layoutRutinas.getChildCount() > 1) {
+            layoutRutinas.removeViews(1, layoutRutinas.getChildCount() - 1);
+        }
+
+        cargarRutinas();
+    }
+
 }

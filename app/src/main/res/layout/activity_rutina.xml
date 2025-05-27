@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="16dp">
+
+    <ScrollView
+        android:id="@+id/scrollRutina"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnGuardarTodo"
+        android:layout_marginBottom="10dp">
+
+        <LinearLayout
+            android:id="@+id/layoutEjercicios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnGuardarTodo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Terminar Rutina"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/rojo"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp" />
+</RelativeLayout>

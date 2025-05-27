@@ -29,11 +29,11 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/edtDescripcionRutina"
         android:layout_marginBottom="12dp"
-        android:hint="Nombre de la rutina"
+        android:hint="@string/nombre_de_la_rutina"
         android:backgroundTint="@color/rojo"
         android:padding="12dp"
         android:textColor="@color/black"
-        android:textColorHint="@color/black" />
+        android:textColorHint="@color/gris" />
 
     <!-- Descripción -->
     <EditText
@@ -42,12 +42,12 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnGuardarRutina"
         android:layout_marginBottom="12dp"
-        android:hint="Descripción (ej. brazos, piernas...)"
+        android:hint="@string/descripci_n_ej_brazos_piernas"
         android:backgroundTint="@color/rojo"
         android:padding="12dp"
         android:minLines="3"
         android:textColor="@color/black"
-        android:textColorHint="@color/black" />
+        android:textColorHint="@color/gris" />
 
     <!-- Botón guardar -->
     <Button

@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:id="@+id/calendarContainer"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/gris"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="20dp"
+        android:backgroundTint="@color/blanco_roto"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="40dp"
         app:cardElevation="15dp">
     <!-- Calendario -->
     <CalendarView
@@ -22,8 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@color/gris"
-        android:outlineAmbientShadowColor="@color/azul_oscuro"
+        android:background="@color/blanco_roto"
         android:layout_margin="12dp" />
     </androidx.cardview.widget.CardView>
 

@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/card_background"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/imgEjercicio"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/logo_doit"
+            android:scaleType="centerCrop"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:id="@+id/txtNombreEjercicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre del ejercicio"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutSeries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/btnAgregarSerie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Añadir serie"
+        android:textSize="14sp"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/rojo"
+        android:textColor="@color/white" />
+</LinearLayout>

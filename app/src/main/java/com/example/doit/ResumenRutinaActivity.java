@@ -2,8 +2,10 @@ package com.example.doit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,21 +48,10 @@ public class ResumenRutinaActivity extends AppCompatActivity {
             return;
         }
 
-        mostrarResumenEjercicios();
-
+        mostrarEjerciciosSeleccionados(ejerciciosSeleccionados);
         btnGuardar.setOnClickListener(v -> guardarRutina());
     }
 
-    private void mostrarResumenEjercicios() {
-        String resumen = dbHelper.obtenerResumenEjerciciosPorIds(ejerciciosSeleccionados);
-        for (String nombre : resumen.split(", ")) {
-            TextView textView = new TextView(this);
-            textView.setText("- " + nombre);
-            textView.setTextSize(16);
-            textView.setPadding(8, 8, 8, 8);
-            layoutResumen.addView(textView);
-        }
-    }
 
     private void guardarRutina() {
         String nombreRutina = edtNombreRutina.getText().toString().trim();
@@ -71,7 +62,7 @@ public class ResumenRutinaActivity extends AppCompatActivity {
             return;
         }
 
-        long idEntrenamiento = dbHelper.insertarRutinaPersonalizada(uid, nombreRutina, descripcion);
+        long idEntrenamiento = dbHelper.insertarRutinaPersonalizada(uid, nombreRutina, descripcion, "pesas");
         int idSerie = dbHelper.insertarSerieParaEntrenamiento((int) idEntrenamiento);
 
         for (int idEjercicio : ejerciciosSeleccionados) {
@@ -81,6 +72,37 @@ public class ResumenRutinaActivity extends AppCompatActivity {
         Toast.makeText(this, "Rutina guardada con éxito", Toast.LENGTH_SHORT).show();
         finish();
     }
+
+    private void mostrarEjerciciosSeleccionados(List<Integer> idsEjercicios) {
+        LinearLayout layoutResumen = findViewById(R.id.layoutResumenEjercicios);
+        layoutResumen.removeAllViews();
+
+        List<String> nombres = dbHelper.obtenerNombresEjerciciosPorIds(idsEjercicios);
+        List<String> imagenes = dbHelper.obtenerImagenesPorIds(idsEjercicios);
+
+        for (int i = 0; i < idsEjercicios.size(); i++) {
+            View card = getLayoutInflater().inflate(R.layout.item_ejercicio_rutina, null);
+
+            TextView txtNombre = card.findViewById(R.id.txtNombreEjercicio);
+            ImageView img = card.findViewById(R.id.imgEjercicio);
+            Button btnAgregar = card.findViewById(R.id.btnAgregarSerie);
+
+            txtNombre.setText(nombres.get(i));
+            btnAgregar.setVisibility(View.GONE); // ocultamos botón de agregar
+
+            String uri = imagenes.get(i);
+            if (uri != null && !uri.isEmpty()) {
+                int resId = getResources().getIdentifier(uri, "drawable", getPackageName());
+                img.setImageResource(resId != 0 ? resId : R.drawable.placeholder);
+            } else {
+                img.setImageResource(R.drawable.placeholder);
+            }
+
+            layoutResumen.addView(card);
+        }
+    }
+
+
 
     private void mostrarDialogoConfirmacion() {
         new androidx.appcompat.app.AlertDialog.Builder(this)

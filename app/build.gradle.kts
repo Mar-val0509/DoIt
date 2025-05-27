@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
+
 }
 
 android {
@@ -40,6 +41,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.play.services.location)
     implementation(libs.firebase.auth)
+    implementation(libs.cardview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -48,4 +50,13 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
 
+    implementation(libs.google.firebase.analytics)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.auth.v2231)
+    implementation(libs.firebase.storage)
+    implementation(libs.multidex)
+
+
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
 }

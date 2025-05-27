@@ -19,40 +19,83 @@
         android:hint="Correo electrónico"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/black"
-        android:backgroundTint="@color/black"
+        android:textColorHint="@color/gris"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/rojo"
         android:layout_below="@id/imgLogo"
         android:layout_marginTop="20dp"
         android:inputType="textEmailAddress"/>
 
-    <EditText
-        android:id="@+id/inputPassword"
-        android:hint="Contraseña"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
         android:layout_below="@id/inputEmail"
-        android:textColorHint="@color/black"
-        android:backgroundTint="@color/black"
-        android:layout_marginTop="20dp"/>
+        android:id="@+id/inputPasswordContainer"
+        android:layout_marginTop="20dp">
 
-    <EditText
-        android:id="@+id/inputConfirmPassword"
-        android:hint="Confirmar contraseña"
+        <EditText
+            android:id="@+id/inputPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:textColorHint="@color/gris"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/rojo"
+            android:paddingEnd="48dp" />
+
+        <ImageButton
+            android:id="@+id/btnTogglePassword"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:padding="4dp"
+            android:src="@drawable/ic_visibility_off"
+            android:scaleType="fitCenter" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_below="@id/inputPassword"
-        android:textColorHint="@color/black"
-        android:backgroundTint="@color/black"
-        android:layout_marginTop="20dp"/>
+        android:layout_below="@id/inputPasswordContainer"
+        android:id="@+id/inputConfirmPasswordContainer"
+
+        android:layout_marginTop="20dp">
+
+        <EditText
+            android:id="@+id/inputConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:textColorHint="@color/gris"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/rojo"
+            android:paddingEnd="48dp" />
+
+        <ImageButton
+            android:id="@+id/btnTogglePassword2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:padding="4dp"
+            android:src="@drawable/ic_visibility_off"
+            android:scaleType="fitCenter" />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registrarse"
-        android:layout_below="@id/inputConfirmPassword"
+        android:text="@string/registrarse"
+        android:textColor="@color/white"
+        android:layout_below="@id/inputConfirmPasswordContainer"
         android:backgroundTint="@color/azul_oscuro"
         android:layout_marginTop="55dp"/>
 
@@ -60,7 +103,8 @@
         android:id="@+id/btnGoLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ya tengo cuenta"
+        android:text="@string/ya_tengo_cuenta"
+        android:textColor="@color/white"
         android:layout_below="@id/btnRegister"
         android:backgroundTint="@color/rojo"
         android:layout_marginTop="20dp"/>

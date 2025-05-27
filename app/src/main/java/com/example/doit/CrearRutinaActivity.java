@@ -6,21 +6,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
+import android.widget.*;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CrearRutinaActivity extends AppCompatActivity {
 
@@ -44,9 +36,9 @@ public class CrearRutinaActivity extends AppCompatActivity {
         btnContinuar.setOnClickListener(v -> irAResumenRutina());
 
         ImageView btnAgregarEjercicio = findViewById(R.id.btnAgregarEjercicio);
-        btnAgregarEjercicio.setOnClickListener(v -> {
-            startActivity(new Intent(this, AgregarEjercicioActivity.class));
-        });
+        btnAgregarEjercicio.setOnClickListener(v ->
+                startActivity(new Intent(this, AgregarEjercicioActivity.class))
+        );
 
         Button btnCancelar = findViewById(R.id.btnCancelar);
         btnCancelar.setOnClickListener(v -> mostrarDialogoCancelar());
@@ -57,51 +49,66 @@ public class CrearRutinaActivity extends AppCompatActivity {
 
         int idCol = cursor.getColumnIndex("id_ejercicio");
         int nombreCol = cursor.getColumnIndex("nombre");
+        int descripcionCol = cursor.getColumnIndex("descripcion");
         int uriCol = cursor.getColumnIndex("imagen_uri");
 
         while (cursor.moveToNext()) {
             int id = cursor.getInt(idCol);
             String nombre = cursor.getString(nombreCol);
+            String descripcion = cursor.getString(descripcionCol);
             String imagenUri = cursor.getString(uriCol);
 
-            View card = crearCardEjercicio(id, nombre, imagenUri);
+            View card = crearCardEjercicio(id, nombre, descripcion, imagenUri);
             layoutEjercicios.addView(card);
         }
 
         cursor.close();
     }
 
-
-    private View crearCardEjercicio(int id, String nombre, String imagenUri) {
+    private View crearCardEjercicio(int id, String nombre, String descripcion, String imagenUri) {
         LinearLayout container = new LinearLayout(this);
         container.setOrientation(LinearLayout.HORIZONTAL);
         container.setPadding(24, 24, 24, 24);
         container.setBackgroundResource(R.drawable.card_background);
 
-        // Imagen
         ImageView imageView = new ImageView(this);
         imageView.setLayoutParams(new LinearLayout.LayoutParams(160, 160));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.drawable.placeholder); // por si falla
+        imageView.setImageResource(R.drawable.placeholder);
 
         if (imagenUri != null && !imagenUri.isEmpty()) {
-            try {
+            if (imagenUri.startsWith("http")) {
+                Glide.with(this).load(imagenUri).placeholder(R.drawable.placeholder).into(imageView);
+            } else if (imagenUri.startsWith("content://") || imagenUri.startsWith("file://")) {
                 imageView.setImageURI(Uri.parse(imagenUri));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                int resId = getResources().getIdentifier(imagenUri, "drawable", getPackageName());
+                if (resId != 0) {
+                    imageView.setImageResource(resId);
+                } else {
+                    imageView.setImageResource(R.drawable.placeholder);
+                }
             }
         }
 
-        // Texto
-        TextView textView = new TextView(this);
-        textView.setText(nombre);
-        textView.setTextSize(18);
-        textView.setPadding(24, 0, 0, 0);
+        TextView titleView = new TextView(this);
+        titleView.setText(nombre);
+        titleView.setTextSize(18);
+        titleView.setPadding(24, 0, 0, 0);
+
+        TextView descView = new TextView(this);
+        descView.setText(descripcion);
+        descView.setTextSize(14);
+        descView.setPadding(24, 8, 0, 0);
+
+        LinearLayout textLayout = new LinearLayout(this);
+        textLayout.setOrientation(LinearLayout.VERTICAL);
+        textLayout.addView(titleView);
+        textLayout.addView(descView);
 
         container.addView(imageView);
-        container.addView(textView);
+        container.addView(textLayout);
 
-        // Cambio visual al seleccionar
         container.setOnClickListener(v -> {
             if (ejerciciosSeleccionados.contains(id)) {
                 ejerciciosSeleccionados.remove(id);
@@ -143,4 +150,13 @@ public class CrearRutinaActivity extends AppCompatActivity {
                 .setNegativeButton("No", null)
                 .show();
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        layoutEjercicios.removeAllViews();
+        cargarEjerciciosDisponibles();
+    }
+
 }

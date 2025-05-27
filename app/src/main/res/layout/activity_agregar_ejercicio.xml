@@ -14,7 +14,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
-        android:background="@color/blanco_roto"
+        android:background="@drawable/card_background"
         android:contentDescription="@string/vista_previa_de_la_imagen" />
 
     <!-- Botón seleccionar imagen -->
@@ -26,7 +26,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/elegir_o_tomar_foto"
         android:textColor="@color/white"
-        android:backgroundTint="@color/rojo"
+        android:backgroundTint="@color/azul_oscuro"
         android:textSize="16sp" />
 
     <!-- Nombre del ejercicio -->
@@ -40,7 +40,7 @@
         android:backgroundTint="@color/rojo"
         android:padding="12dp"
         android:textColor="@color/black"
-        android:textColorHint="@color/black"
+        android:textColorHint="@color/gris"
         android:inputType="textCapWords" />
 
     <!-- Descripción del ejercicio -->
@@ -54,7 +54,7 @@
         android:backgroundTint="@color/rojo"
         android:padding="12dp"
         android:textColor="@color/black"
-        android:textColorHint="@color/black"
+        android:textColorHint="@color/gris"
         android:inputType="textMultiLine"
         android:minLines="3" />
 

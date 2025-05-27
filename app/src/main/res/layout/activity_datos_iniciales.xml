@@ -5,34 +5,40 @@
     android:background="@color/white">
 
     <!-- LOGO DE LA APP -->
+
     <ImageView
-        android:id="@+id/imgLogo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:id="@+id/imgAvatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo_doit"
-        android:contentDescription="Logo DoIt"
         android:layout_marginTop="30dp"
-        android:layout_alignParentTop="true" />
+        android:src="@drawable/usuario_nav"
+        android:contentDescription="@string/avatar_de_usuario"
+        android:background="@drawable/card_background"
+        android:scaleType="centerCrop" />
 
-        <EditText
-            android:id="@+id/inputNombre"
-            android:hint="Nombre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/rojo"
-            android:textColorHint="@color/black"
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/imgLogo"/>
 
-        <EditText
+    <EditText
+        android:id="@+id/inputNombre"
+        android:hint="Nombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/rojo"
+        android:textColorHint="@color/gris"
+        android:textColor="@color/black"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/imgAvatar" />
+
+
+    <EditText
             android:id="@+id/inputEdad"
             android:hint="Edad"
             android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textColorHint="@color/black"
+            android:textColorHint="@color/gris"
+            android:textColor="@color/black"
             android:backgroundTint="@color/rojo"
             android:layout_below="@+id/inputNombre"/>
 
@@ -43,7 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textColorHint="@color/black"
+            android:textColorHint="@color/gris"
+            android:textColor="@color/black"
             android:backgroundTint="@color/rojo"
             android:layout_below="@+id/inputEdad"/>
 
@@ -55,7 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textColorHint="@color/black"
+            android:textColorHint="@color/gris"
+            android:textColor="@color/black"
             android:backgroundTint="@color/rojo"
             android:layout_below="@+id/inputPeso"/>
 

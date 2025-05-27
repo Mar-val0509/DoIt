@@ -12,7 +12,7 @@ import java.util.List;
 public class DoItDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "doit.db";
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 11;
 
     public DoItDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -22,12 +22,19 @@ public class DoItDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS usuario (" +
                 "uid TEXT PRIMARY KEY, " +
-                "nombre TEXT, edad INTEGER, peso REAL, altura REAL, sexo TEXT)");
+                "nombre TEXT, " +
+                "edad INTEGER, " +
+                "peso REAL, " +
+                "altura REAL, " +
+                "sexo TEXT, " +
+                "foto_perfil TEXT)");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS entrenamiento (" +
                 "id_entrenamiento INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "uid TEXT, " +
                 "nombre TEXT, " +
+                "descripcion TEXT, " +
+                "tipo TEXT," +
                 "fecha TEXT, duracion TEXT, " +
                 "distancia REAL, velocidad REAL, ritmo REAL)");
 
@@ -68,6 +75,38 @@ public class DoItDBHelper extends SQLiteOpenHelper {
                 "peso_usado REAL, " +
                 "distancia_recorrida REAL, " +
                 "FOREIGN KEY(id_serie) REFERENCES serie(id_serie))");
+
+        db.execSQL("CREATE TABLE entrenamiento_realizado (" +
+                "id_entrenamiento INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "id_rutina INTEGER," +
+                "fecha TEXT," +
+                "uid_usuario TEXT, " +
+                "FOREIGN KEY (id_rutina) REFERENCES rutina(id_entrenamiento))");
+
+
+
+        db.execSQL("INSERT INTO ejercicio (nombre, descripcion, imagen_uri) VALUES\n" +
+                "('Press de banca', 'Ejercicio de fuerza para pectorales realizado en banco plano.', 'press_banca')," +
+                "('Sentadillas', 'Ejercicio compuesto que trabaja piernas y glúteos.', 'sentadillas')," +
+                "('Peso muerto', 'Ejercicio de levantamiento que involucra la cadena posterior.', 'peso_muerto')," +
+                "('Press militar', 'Ejercicio de hombros que se realiza con barra o mancuernas.', 'press_militar')," +
+                "('Remo con barra', 'Ejercicio para la espalda media y alta.', 'remo_barra')," +
+                "('Fondos en paralelas', 'Ideal para trabajar tríceps y pecho.', 'fondos_paralelas')," +
+                "('Elevaciones laterales', 'Aislamiento de deltoides laterales.', 'elevaciones_laterales')," +
+                "('Curl de bíceps', 'Ejercicio básico para fortalecer los bíceps.', 'curl_biceps')," +
+                "('Extensión de tríceps', 'Ejercicio para el desarrollo de los tríceps.', 'extension_triceps')," +
+                "('Zancadas', 'Ejercicio unilateral para piernas y glúteos.', 'zancadas')," +
+                "('Jalón al pecho', 'Ejercicio para dorsales con polea.', 'jalon_pecho')," +
+                "('Remo con mancuerna', 'Remo unilateral para espalda.', 'remo_mancuerna')," +
+                "('Curl martillo', 'Trabaja bíceps y braquiorradial.', 'curl_martillo')," +
+                "('Abdominales crunch', 'Ejercicio tradicional para el abdomen.', 'crunch_abdominal')," +
+                "('Plancha abdominal', 'Ejercicio isométrico para el core.', 'plancha_abdominal'),\n" +
+                "('Press de piernas', 'Trabajo de cuádriceps y glúteos en máquina.', 'press_piernas')," +
+                "('Pantorrillas de pie', 'Elevaciones para fortalecer gemelos.', 'pantorrillas_pie')," +
+                "('Hip thrust', 'Enfocado en el glúteo mayor.', 'hip_thrust')," +
+                "('Face pulls', 'Trabajo de deltoides posteriores y trapecios con polea.', 'face_pulls')," +
+                "('Burpees', 'Ejercicio completo para cardio y fuerza.', 'burpees')"
+        );
     }
 
     @Override
@@ -77,21 +116,43 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS ejercicio");
         db.execSQL("DROP TABLE IF EXISTS entrenamiento");
         db.execSQL("DROP TABLE IF EXISTS usuario");
+        db.execSQL("DROP TABLE IF EXISTS entrenamiento_realizado");
         onCreate(db);
     }
 
-    public void insertarUsuario(String uid, String nombre, int edad, double peso, double altura, String sexo) {
-        SQLiteDatabase db = getWritableDatabase();
+    public Cursor obtenerDatosUsuario(String uid) {
+        SQLiteDatabase db = getReadableDatabase();
+        return db.rawQuery("SELECT nombre, edad, peso, altura, sexo, foto_perfil FROM usuario WHERE uid = ?", new String[]{uid});
+    }
+
+    public void insertarUsuarioVacio(String uid) {
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("uid", uid);
+        values.put("nombre", "");
+        values.put("edad", "");
+        values.put("peso", "");
+        values.put("altura", "");
+        values.put("sexo", "");
+        values.put("foto_perfil", "");
+        db.insert("usuario", null, values);
+        db.close();
+    }
+
+
+    public void actualizarUsuario(String uid, String nombre, int edad, double peso, double altura,String sexo, String foto_perfil) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
         values.put("nombre", nombre);
         values.put("edad", edad);
         values.put("peso", peso);
         values.put("altura", altura);
         values.put("sexo", sexo);
-        db.insert("usuario", null, values);
+        values.put("foto_perfil", foto_perfil);  // <-- Aquí también
+        db.update("usuario", values, "uid = ?", new String[]{uid});
         db.close();
     }
+
 
     public boolean existeUsuario(String uid) {
         SQLiteDatabase db = getReadableDatabase();
@@ -102,20 +163,7 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         return existe;
     }
 
-    public String obtenerSexoUsuario(String uid) {
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT sexo FROM usuario WHERE uid = ?", new String[]{uid});
-        String sexo = "Otro";
-        if (cursor.moveToFirst()) {
-            sexo = cursor.getString(0);
-        }
-        cursor.close();
-        db.close();
-        return sexo;
-    }
-
-    public void guardarEntrenamiento(String uid, String fecha, String duracion,
-                                     double distanciaKm, double velocidadMedia, double ritmoPromedio) {
+    public void guardarEntrenamiento(String uid, String fecha, String duracion, String tipo, double distanciaKm, double velocidadMedia, double ritmoPromedio) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("uid", uid);
@@ -123,32 +171,33 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         values.put("duracion", duracion);
         values.put("distancia", distanciaKm);
         values.put("velocidad", velocidadMedia);
+        values.put("tipo", tipo);
         values.put("ritmo", ritmoPromedio);
         db.insert("entrenamiento", null, values);
         db.close();
     }
 
-    public long insertarEjercicio(String nombre, String descripcion, String imagenUri) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("nombre", nombre);
-        values.put("descripcion", descripcion);
-        values.put("imagen_uri", imagenUri);
-        return db.insert("ejercicio", null, values);
-    }
-
-
-    public Cursor obtenerTodosLosEjercicios() {
+    public Cursor obtenerRutinaPorId(int idEntrenamiento) {
         SQLiteDatabase db = getReadableDatabase();
-        return db.rawQuery("SELECT id_ejercicio, nombre FROM ejercicio", null);
+        return db.rawQuery("SELECT * FROM entrenamiento WHERE id_entrenamiento = ?",
+                new String[]{String.valueOf(idEntrenamiento)});
     }
-
 
     public long insertarSerie(int idEntrenamiento) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("id_entrenamiento", idEntrenamiento);
         return db.insert("serie", null, values);
+    }
+
+    public void insertarRepeticion(long idSerie, int repeticiones, float peso, float distancia) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id_serie", idSerie);
+        values.put("repeticiones", repeticiones);
+        values.put("peso_usado", peso);
+        values.put("distancia_recorrida", distancia);
+        db.insert("repeticion", null, values);
     }
 
     public void insertarSerieEjercicio(long idSerie, long idEjercicio) {
@@ -159,42 +208,119 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         db.insert("serie_ejercicio", null, values);
     }
 
-    public void insertarRepeticion(long idSerie, int repeticiones, double pesoUsado, Double distanciaRecorrida) {
+
+    public void insertarEjercicio(String nombre, String descripcion, String imagenUri) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("id_serie", idSerie);
-        values.put("repeticiones", repeticiones);
-        values.put("peso_usado", pesoUsado);
-        if (distanciaRecorrida != null) {
-            values.put("distancia_recorrida", distanciaRecorrida);
-        }
-        db.insert("repeticion", null, values);
+        values.put("nombre", nombre);
+        values.put("descripcion", descripcion);
+        values.put("imagen_uri", imagenUri);
+        db.insert("ejercicio", null, values);
     }
 
-    public Cursor obtenerRutinasPorUsuario(String uid) {
+    public Cursor obtenerTodosLosEjercicios() {
         SQLiteDatabase db = getReadableDatabase();
-        return db.rawQuery("SELECT id_entrenamiento, nombre FROM entrenamiento WHERE uid = ?", new String[]{uid});
+        return db.rawQuery("SELECT * FROM ejercicio", null);
     }
 
-    public List<String> obtenerNombresEjerciciosDeRutina(int idEntrenamiento) {
+    public Cursor obtenerEjerciciosDeRutina(int idEntrenamiento) {
         SQLiteDatabase db = getReadableDatabase();
-        List<String> ejercicios = new ArrayList<>();
-        Cursor cursor = db.rawQuery(
-                "SELECT DISTINCT e.nombre FROM ejercicio e " +
-                        "JOIN serie_ejercicio se ON se.id_ejercicio = e.id_ejercicio " +
+        return db.rawQuery(
+                "SELECT DISTINCT e.id_ejercicio, e.nombre, e.descripcion, e.imagen_uri " +
+                        "FROM ejercicio e " +
+                        "JOIN serie_ejercicio se ON e.id_ejercicio = se.id_ejercicio " +
                         "JOIN serie s ON s.id_serie = se.id_serie " +
                         "WHERE s.id_entrenamiento = ?",
                 new String[]{String.valueOf(idEntrenamiento)}
         );
-        while (cursor.moveToNext()) {
-            ejercicios.add(cursor.getString(0));
-        }
-        cursor.close();
-        return ejercicios;
     }
 
-    public String obtenerResumenEjerciciosPorIds(List<Integer> ids) {
-        if (ids == null || ids.isEmpty()) return "";
+    public Cursor obtenerRutinasPorUsuarioDisplay(String uid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(
+                "SELECT DISTINCT e.id_entrenamiento, e.nombre, e.descripcion " +
+                        "FROM entrenamiento e " +
+                        "WHERE e.tipo= 'pesas' AND e.uid = ? ",
+                new String[]{uid}
+        );
+    }
+
+    public Cursor obtenerEntrenamientoAleatorio(String uidUsuario) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT id_entrenamiento FROM entrenamiento WHERE tipo = 'pesas' AND uid = ? ORDER BY RANDOM() LIMIT 1";
+        return db.rawQuery(query, new String[]{uidUsuario});
+    }
+
+    public Cursor obtenerEntrenamientosRealizados(String uidUsuario) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT er.id_entrenamiento, e.nombre, e.descripcion " +
+                "FROM entrenamiento_realizado er " +
+                "JOIN entrenamiento e ON er.id_rutina = e.id_entrenamiento " +
+                "WHERE er.uid_usuario = ? " +
+                "ORDER BY er.fecha DESC";
+        return db.rawQuery(query, new String[]{uidUsuario});
+    }
+
+    public int contarDiasEjercicio(String uid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(DISTINCT fecha) FROM entrenamiento_realizado WHERE uid_usuario = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{uid});
+        int dias = 0;
+        if (cursor.moveToFirst()) dias = cursor.getInt(0);
+        cursor.close();
+        return dias;
+    }
+
+    public String obtenerFechaMasAntigua(String uid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT MIN(fecha) FROM entrenamiento_realizado WHERE uid_usuario = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{uid});
+        String fecha = null;
+        if (cursor.moveToFirst()) fecha = cursor.getString(0);
+        cursor.close();
+        return fecha;
+    }
+
+    public List<Integer> obtenerIdsSeriesPorEntrenamiento(int idEntrenamiento) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Integer> ids = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT id_serie FROM serie WHERE id_entrenamiento = ?",
+                new String[]{String.valueOf(idEntrenamiento)}
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                ids.add(cursor.getInt(cursor.getColumnIndexOrThrow("id_serie")));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return ids;
+    }
+
+    public Cursor obtenerEjercicioPorSerie(int idSerie) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(
+                "SELECT e.nombre FROM ejercicio e " +
+                        "JOIN serie_ejercicio se ON e.id_ejercicio = se.id_ejercicio " +
+                        "WHERE se.id_serie = ? LIMIT 1",
+                new String[]{String.valueOf(idSerie)}
+        );
+    }
+
+    public Cursor obtenerRepeticionesPorSerie(int idSerie) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(
+                "SELECT repeticiones, peso_usado FROM repeticion WHERE id_serie = ?",
+                new String[]{String.valueOf(idSerie)}
+        );
+    }
+
+    public List<String> obtenerNombresEjerciciosPorIds(List<Integer> ids) {
+        List<String> nombres = new ArrayList<>();
+        if (ids == null || ids.isEmpty()) return nombres;
+
         SQLiteDatabase db = getReadableDatabase();
         StringBuilder placeholders = new StringBuilder();
         String[] args = new String[ids.size()];
@@ -202,24 +328,40 @@ public class DoItDBHelper extends SQLiteOpenHelper {
             placeholders.append(i > 0 ? ",?" : "?");
             args[i] = String.valueOf(ids.get(i));
         }
-        Cursor cursor = db.rawQuery("SELECT nombre FROM ejercicio WHERE id_ejercicio IN (" + placeholders + ")", args);
-        List<String> nombres = new ArrayList<>();
+
+        String query = "SELECT nombre FROM ejercicio WHERE id_ejercicio IN (" + placeholders + ")";
+        Cursor cursor = db.rawQuery(query, args);
+
         while (cursor.moveToNext()) {
-            nombres.add(cursor.getString(0));
+            nombres.add(cursor.getString(cursor.getColumnIndexOrThrow("nombre")));
         }
         cursor.close();
-        return String.join(", ", nombres);
+        return nombres;
     }
 
-    public int obtenerUltimoIdEntrenamiento() {
+    public List<String> obtenerImagenesPorIds(List<Integer> ids) {
+        List<String> imagenes = new ArrayList<>();
+        if (ids == null || ids.isEmpty()) return imagenes;
+
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT MAX(id_entrenamiento) FROM entrenamiento", null);
-        int id = -1;
-        if (cursor.moveToFirst()) {
-            id = cursor.getInt(0);
+        StringBuilder placeholders = new StringBuilder();
+        String[] args = new String[ids.size()];
+
+        for (int i = 0; i < ids.size(); i++) {
+            placeholders.append(i > 0 ? ",?" : "?");
+            args[i] = String.valueOf(ids.get(i));
         }
+
+        Cursor cursor = db.rawQuery(
+                "SELECT imagen_uri FROM ejercicio WHERE id_ejercicio IN (" + placeholders + ")", args
+        );
+
+        while (cursor.moveToNext()) {
+            imagenes.add(cursor.getString(0));
+        }
+
         cursor.close();
-        return id;
+        return imagenes;
     }
 
     public int insertarSerieParaEntrenamiento(int idEntrenamiento) {
@@ -230,6 +372,15 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         return (int) id;
     }
 
+    public long insertarEntrenamientoRealizado(int id_rutina, String uidUsuario, String fecha) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id_rutina", id_rutina);
+        values.put("uid_usuario", uidUsuario);
+        values.put("fecha", fecha);
+        return db.insert("entrenamiento_realizado", null, values);
+    }
+
     public void insertarEjercicioEnSerie(int idSerie, int idEjercicio) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -238,19 +389,20 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         db.insert("serie_ejercicio", null, values);
     }
 
-    public long insertarRutinaPersonalizada(String uid, String nombre, String descripcion) {
+    public long insertarRutinaPersonalizada(String uid, String nombre, String descripcion, String tipo) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("uid", uid);
         values.put("nombre", nombre);
         values.put("fecha", ""); // puedes modificar si usas fecha
-        values.put("duracion", descripcion); // reutilizando campo "duracion" para la descripción breve
+        values.put("descripcion", descripcion);
+        values.put("tipo", tipo);
+        values.put("duracion", " "); // reutilizando campo "duracion" para la descripción breve
         values.put("distancia", 0);
         values.put("velocidad", 0);
         values.put("ritmo", 0);
         return db.insert("entrenamiento", null, values);
     }
-
 
     public String obtenerFraseAleatoria() {
         SQLiteDatabase db = getReadableDatabase();
@@ -263,41 +415,5 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         db.close();
         return frase;
     }
-
-    public Cursor obtenerEntrenamientosPorUsuario(String uid) {
-        SQLiteDatabase db = getReadableDatabase();
-        return db.rawQuery("SELECT * FROM entrenamiento WHERE uid = ? ORDER BY fecha DESC", new String[]{uid});
-    }
-
-    public static class Estadisticas {
-        public double distanciaMedia;
-        public double ritmoMedio;
-        public double kmMasRapido;
-    }
-
-    public Estadisticas obtenerEstadisticasSemana(String uid) {
-        Estadisticas stats = new Estadisticas();
-        SQLiteDatabase db = getReadableDatabase();
-
-        // Fechas
-        long hoy = System.currentTimeMillis();
-        long hace7dias = hoy - (7L * 24 * 60 * 60 * 1000);
-
-        Cursor cursor = db.rawQuery(
-                "SELECT AVG(distancia), AVG(ritmo), MIN(ritmo) FROM entrenamiento " +
-                        "WHERE uid = ? AND fecha BETWEEN ? AND ?",
-                new String[]{uid, String.valueOf(hace7dias), String.valueOf(hoy)}
-        );
-
-        if (cursor.moveToFirst()) {
-            stats.distanciaMedia = cursor.getDouble(0);
-            stats.ritmoMedio = cursor.getDouble(1);
-            stats.kmMasRapido = cursor.getDouble(2);
-        }
-
-        cursor.close();
-        return stats;
-    }
-
 
 }

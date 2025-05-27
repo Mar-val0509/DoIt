@@ -10,11 +10,12 @@
     <!-- Botón agregar ejercicio -->
     <ImageView
         android:id="@+id/btnAgregarEjercicio"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:src="@drawable/logo_anadir"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
+        android:background="@drawable/card_background"
         android:contentDescription="Agregar ejercicio" />
 
     <!-- Scroll con los ejercicios -->

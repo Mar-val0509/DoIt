@@ -6,10 +6,12 @@
     <!-- CONTENIDO SCROLLABLE -->
     <ScrollView
         android:id="@+id/scrollRutinas"
-        android:layout_above="@id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="24dp">
+        android:layout_above="@id/btnHistorial"
+        android:padding="24dp"
+        android:layout_marginBottom="10dp"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:id="@+id/layoutRutinas"
@@ -18,23 +20,22 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal">
 
-            <!-- Primer recuadro: Añadir rutina -->
+            <!-- CENTRADO: tarjeta Añadir rutina -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:gravity="center"
                 android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:id="@+id/cardAgregarRutina"
-                    android:layout_width="0dp"
+                    android:layout_width="160dp"
                     android:layout_height="160dp"
-                    android:layout_weight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:padding="12dp"
                     android:clickable="true"
-                    android:background="@color/blanco_roto"
+                    android:background="@drawable/card_background"
                     android:focusable="true">
 
                     <ImageView
@@ -42,31 +43,38 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/logo_anadir"
-                        android:contentDescription="Agregar rutina" />
+                        android:contentDescription="@string/agregar_rutina" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Añadir rutina"
+                        android:text="@string/a_adir_rutina"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginTop="8dp" />
                 </LinearLayout>
-
-                <!-- Espacio vacío para que quede centrado si es único -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="160dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:background="@color/blanco_roto"
-                    android:visibility="invisible"/>
             </LinearLayout>
 
-            <!-- Aquí se añadirán dinámicamente las tarjetas de rutina (2 por fila) -->
-
+            <!-- Aquí se añadirán dinámicamente las rutinas en filas de 2 -->
         </LinearLayout>
+
+
     </ScrollView>
+
+    <Button
+        android:id="@+id/btnHistorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/historial_de_Entrenamientos"
+        android:textSize="16sp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@id/bottomNav"
+        android:backgroundTint="@color/azul_oscuro"
+        android:textColor="@android:color/white"
+        />
+
 
     <!-- Menú de navegación inferior -->
     <LinearLayout

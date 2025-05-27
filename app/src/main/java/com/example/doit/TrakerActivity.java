@@ -1,151 +1,210 @@
 package com.example.doit;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.Looper;
-import android.webkit.WebView;
+import android.os.SystemClock;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.*;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import android.os.Handler;
-import android.os.SystemClock;
-import android.widget.Toast;
-
+import java.util.*;
 
 public class TrakerActivity extends AppCompatActivity {
 
-    FusedLocationProviderClient fusedLocationClient;
-    LocationCallback locationCallback;
-    List<Location> locationList = new ArrayList<>();
-    double totalDistance = 0.0; // en metros
-    long startTime = 0;
-    final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
+    private final List<Location> locationList = new ArrayList<>();
+    private long startTime = 0;
+    private long pauseOffset = 0;
+    private boolean isTracking = false;
+    private boolean isPaused = false;
+    private double totalDistance = 0;
 
-    Handler chronoHandler = new Handler();
-    long chronoStart = 0L;
-    Runnable chronoRunnable;
+    private Handler chronoHandler = new Handler();
+    private Runnable chronoRunnable;
+
+    private TextView distanceText, currentSpeedText, avgSpeedText, paceText, chronoText, txtCountdown;
+    private Button startButton, stopButton, pauseButton, backButton;
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
+
+    private DoItDBHelper dbHelper;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_traker);
 
-        // Obtener UID del usuario actual
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        // Crear instancia del helper
-        DoItDBHelper dbHelper = new DoItDBHelper(this);
-
-        // Consultar el sexo desde la base de datos
-        String sexo = dbHelper.obtenerSexoUsuario(uid);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1001); // Código arbitrario de petición
+        }
 
 
-
+        dbHelper = new DoItDBHelper(this);
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        Button startButton = findViewById(R.id.btnStart);
-        Button stopButton = findViewById(R.id.btnStop);
-        TextView distanceText = findViewById(R.id.txtDistance);
-        TextView currentSpeedText = findViewById(R.id.txtSpeed); // velocidad actual
-        TextView avgSpeedText = findViewById(R.id.txtAvgSpeed);  // velocidad media
-        TextView paceText = findViewById(R.id.txtPace);          // ritmo promedio (min/km)
+        distanceText = findViewById(R.id.txtDistance);
+        currentSpeedText = findViewById(R.id.txtSpeed);
+        avgSpeedText = findViewById(R.id.txtAvgSpeed);
+        paceText = findViewById(R.id.txtPace);
+        chronoText = findViewById(R.id.txtChrono);
 
+        startButton = findViewById(R.id.btnStart);
+        stopButton = findViewById(R.id.btnStop);
+        pauseButton = findViewById(R.id.btnPause);
+        backButton = findViewById(R.id.btnBack);
+        txtCountdown = findViewById(R.id.txtCountdown);
 
 
         startButton.setOnClickListener(v -> {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        LOCATION_PERMISSION_REQUEST_CODE);
-            } else {
-                startTime = System.currentTimeMillis();
-                startLocationUpdates(distanceText, currentSpeedText, avgSpeedText, paceText);
-            }
-            chronoStart = SystemClock.elapsedRealtime();
-            startChrono();
+            startButton.setEnabled(false);  // Evitar múltiples clics
+            txtCountdown.setVisibility(View.VISIBLE);
+            new CountDownTimer(4000, 1000) {
+                int count = 3;
 
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    if (count > 0) {
+                        txtCountdown.setText(String.valueOf(count));
+                        count--;
+                    } else {
+                        txtCountdown.setText("¡YA!");
+                    }
+                }
 
-        } );
-
-        stopButton.setOnClickListener(v -> {
-            stopLocationUpdates();
-            chronoHandler.removeCallbacks(chronoRunnable);
-
-            chronoHandler.removeCallbacks(chronoRunnable);
-
-            // Calcular los datos
-            long elapsedMillis = SystemClock.elapsedRealtime() - chronoStart;
-            int hours = (int) (elapsedMillis / (1000 * 60 * 60));
-            int minutes = (int) (elapsedMillis / (1000 * 60)) % 60;
-            int seconds = (int) (elapsedMillis / 1000) % 60;
-            String duracionStr = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
-
-            double distanciaKm = totalDistance / 1000.0;
-            long elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
-            double velocidadMedia = elapsedTime > 0 ? (distanciaKm / (elapsedTime / 3600.0)) : 0;
-            double ritmoPromedio = distanciaKm > 0 ? (elapsedTime / 60.0) / distanciaKm : 0;
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
-            String fecha = sdf.format(new Date());
-
-            String uid2 = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-            // Guardar en base de datos
-            DoItDBHelper dbHelper2 = new DoItDBHelper(this);
-            dbHelper2.guardarEntrenamiento(uid2, fecha, duracionStr, distanciaKm, velocidadMedia, ritmoPromedio);
-
-            Toast.makeText(this, "Entrenamiento guardado", Toast.LENGTH_SHORT).show();
-
+                @Override
+                public void onFinish() {
+                    txtCountdown.setVisibility(View.GONE);
+                    startTracking();  // Aquí empieza la carrera
+                }
+            }. start();
         });
+        stopButton.setOnClickListener(v -> stopTracking());
+        pauseButton.setOnClickListener(v -> togglePause());
+        backButton.setOnClickListener(v -> onBackPressed());
     }
 
-    private void startLocationUpdates(TextView distanceText, TextView currentSpeedText, TextView avgSpeedText, TextView paceText) {
+    private void startTracking() {
+        if (isTracking) return;
+
+        isTracking = true;
+        isPaused = false;
+        startTime = SystemClock.elapsedRealtime() - pauseOffset;
+        locationList.clear();
+        totalDistance = 0;
+
+        startChrono();
+        startLocationUpdates();
+    }
+
+    private void stopTracking() {
+        if (!isTracking) return;
+
+        isTracking = false;
+        isPaused = false;
+        pauseOffset = 0;
+        stopLocationUpdates();
+        chronoHandler.removeCallbacks(chronoRunnable);
+
+        long elapsedMillis = SystemClock.elapsedRealtime() - startTime;
+        int hours = (int) (elapsedMillis / (1000 * 60 * 60));
+        int minutes = (int) (elapsedMillis / (1000 * 60)) % 60;
+        int seconds = (int) (elapsedMillis / 1000) % 60;
+        String duracionStr = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
+
+        double distanciaKm = totalDistance / 1000.0;
+        long elapsedTime = elapsedMillis / 1000;
+        double velocidadMedia = elapsedTime > 0 ? (distanciaKm / (elapsedTime / 3600.0)) : 0;
+        double ritmoPromedio = distanciaKm > 0 ? (elapsedTime / 60.0) / distanciaKm : 0;
+
+        String fecha = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date());
+
+        dbHelper.guardarEntrenamiento(uid, fecha, duracionStr,"running", distanciaKm, velocidadMedia, ritmoPromedio);
+        Toast.makeText(this, "Entrenamiento guardado", Toast.LENGTH_SHORT).show();
+    }
+
+    private void togglePause() {
+        if (!isTracking) return;
+
+        if (isPaused) {
+            startTime = SystemClock.elapsedRealtime() - pauseOffset;
+            startChrono();
+            startLocationUpdates();
+        } else {
+            pauseOffset = SystemClock.elapsedRealtime() - startTime;
+            chronoHandler.removeCallbacks(chronoRunnable);
+            stopLocationUpdates();
+        }
+
+        isPaused = !isPaused;
+    }
+
+    private void startChrono() {
+        chronoRunnable = new Runnable() {
+            @Override
+            public void run() {
+                long elapsedMillis = SystemClock.elapsedRealtime() - startTime;
+                int hours = (int) (elapsedMillis / (1000 * 60 * 60));
+                int minutes = (int) (elapsedMillis / (1000 * 60)) % 60;
+                int seconds = (int) (elapsedMillis / 1000) % 60;
+
+                chronoText.setText(String.format(Locale.getDefault(), "Tiempo: %02d:%02d:%02d", hours, minutes, seconds));
+                chronoHandler.postDelayed(this, 1000);
+            }
+        };
+
+        chronoHandler.post(chronoRunnable);
+    }
+
+    private void startLocationUpdates() {
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(1000); // 1000 ms = 1 segundo
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(1000);
+        locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
 
         locationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(LocationResult locationResult) {
-                Location newLocation = locationResult.getLastLocation();
+            public void onLocationResult(LocationResult result) {
+                Location newLocation = result.getLastLocation();
+
                 if (!locationList.isEmpty()) {
                     Location lastLocation = locationList.get(locationList.size() - 1);
                     totalDistance += lastLocation.distanceTo(newLocation);
                 }
+
                 locationList.add(newLocation);
 
-                long elapsedTime = (System.currentTimeMillis() - startTime) / 1000; // segundos
-                double distanceKm = totalDistance / 1000.0;
+                long elapsedTime = (SystemClock.elapsedRealtime() - startTime) / 1000;
+                double distanciaKm = totalDistance / 1000.0;
+                double velocidadActual = newLocation.hasSpeed() ? newLocation.getSpeed() * 3.6 : 0.0;
+                double velocidadMedia = elapsedTime > 0 ? (distanciaKm / (elapsedTime / 3600.0)) : 0;
+                double ritmo = distanciaKm > 0 ? (elapsedTime / 60.0) / distanciaKm : 0;
 
-                double currentSpeedKmH = (newLocation.hasSpeed()) ? newLocation.getSpeed() * 3.6 : 0.0; // m/s * 3.6
-                double avgSpeedKmH = elapsedTime > 0 ? (distanceKm / (elapsedTime / 3600.0)) : 0;       // km/h
-
-                double pace = distanceKm > 0 ? (elapsedTime / 60.0) / distanceKm : 0; // min/km
-
-                distanceText.setText(String.format(Locale.getDefault(), "Distancia: %.2f km", distanceKm));
-                currentSpeedText.setText(String.format(Locale.getDefault(), "Velocidad actual: %.2f km/h", currentSpeedKmH));
-                avgSpeedText.setText(String.format(Locale.getDefault(), "Velocidad media: %.2f km/h", avgSpeedKmH));
-                paceText.setText(String.format(Locale.getDefault(), "Ritmo promedio: %.2f min/km", pace));
+                distanceText.setText(String.format(Locale.getDefault(), "Distancia: %.2f km", distanciaKm));
+                currentSpeedText.setText(String.format(Locale.getDefault(), "Velocidad actual: %.2f km/h", velocidadActual));
+                avgSpeedText.setText(String.format(Locale.getDefault(), "Velocidad media: %.2f km/h", velocidadMedia));
+                paceText.setText(String.format(Locale.getDefault(), "Ritmo promedio: %.2f min/km", ritmo));
             }
         };
 
@@ -162,34 +221,33 @@ public class TrakerActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE &&
-                grantResults.length > 0 &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startTime = System.currentTimeMillis();
+        if (requestCode == 1001) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permiso concedido
+            } else {
+                Toast.makeText(this, "Permiso de ubicación requerido para registrar la carrera", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
-    private void startChrono() {
-        TextView chronoText = findViewById(R.id.txtChrono);
 
-        chronoRunnable = new Runnable() {
-            @Override
-            public void run() {
-                long elapsedMillis = SystemClock.elapsedRealtime() - chronoStart;
-                int hours = (int) (elapsedMillis / (1000 * 60 * 60));
-                int minutes = (int) (elapsedMillis / (1000 * 60)) % 60;
-                int seconds = (int) (elapsedMillis / 1000) % 60;
-
-                chronoText.setText(String.format(Locale.getDefault(), "Tiempo: %02d:%02d:%02d", hours, minutes, seconds));
-                chronoHandler.postDelayed(this, 1000); // actualizar cada segundo
-            }
-        };
-
-        chronoHandler.post(chronoRunnable);
+    @Override
+    public void onBackPressed() {
+        if (!isTracking || !isPaused) {
+            new AlertDialog.Builder(this)
+                    .setTitle("¿Salir?")
+                    .setMessage("La carrera no está guardada. ¿Seguro que deseas salir y perder los datos?")
+                    .setPositiveButton("Salir", (dialog, which) -> {
+                        finish();
+                        startActivity(new Intent(this, RunningActivity.class));
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+        } else {
+            super.onBackPressed();
+        }
     }
-
 }

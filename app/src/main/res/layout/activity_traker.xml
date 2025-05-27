@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo_doit"
+        android:contentDescription="Logo DoIt"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true" />
+
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Iniciar carrera"
+        android:layout_below="@+id/imgLogo"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="@color/verde"/>
+
+
+    <TextView
+        android:id="@+id/txtDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distancia: 0.00 km"
+        android:textSize="18sp"
+        android:layout_below="@id/btnStart"
+        android:layout_marginTop="24dp"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/txtSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Velocidad actual: 0.00 km/h"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_below="@id/txtDistance"
+        android:layout_marginTop="12dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/txtAvgSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Velocidad media: 0.00 km/h"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_below="@id/txtSpeed"
+        android:layout_marginTop="12dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/txtPace"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ritmo promedio: 0.00 min/km"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_below="@id/txtAvgSpeed"
+        android:layout_marginTop="12dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/txtChrono"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tiempo: 00:00:00"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_above="@id/btnStop"
+        android:textColor="@color/black"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btnStop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/rojo"
+        android:layout_above="@id/btnVolver"
+        android:text="Detener carrera" />
+
+    <Button
+        android:id="@+id/btnVolver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Volver"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/gris"
+        android:textColor="@color/white" />
+
+
+</RelativeLayout>

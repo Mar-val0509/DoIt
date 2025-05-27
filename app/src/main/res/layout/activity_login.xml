@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- LOGO DE LA APP -->
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo_doit"
+        android:contentDescription="Logo DoIt"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true" />
+
+    <!-- EMAIL -->
+    <EditText
+        android:id="@+id/inputEmail"
+        android:hint="Email"
+        android:textColorHint="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:backgroundTint="@color/black"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/imgLogo" />
+
+    <!-- CONTRASEÑA -->
+    <EditText
+        android:id="@+id/inputPassword"
+        android:hint="Contraseña"
+        android:textColorHint="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:backgroundTint="@color/black"
+        android:layout_below="@id/inputEmail"
+        android:layout_marginTop="20dp" />
+
+    <!-- BOTÓN LOGIN -->
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Iniciar Sesión"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/azul_oscuro"
+        android:layout_below="@id/inputPassword"
+        android:layout_marginTop="50dp" />
+
+    <!-- BOTÓN REGISTRO -->
+    <Button
+        android:id="@+id/btnGoRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Crear cuenta"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/rojo"
+        android:layout_below="@id/btnLogin"
+        android:layout_marginTop="20dp" />
+
+
+
+    <TextView
+        android:id="@+id/txtFraseMotivacional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="Frase aquí"
+        android:textStyle="italic"
+        android:textSize="18sp"
+        android:textColor="@color/black" />
+
+</RelativeLayout>

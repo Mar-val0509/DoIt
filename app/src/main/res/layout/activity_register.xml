@@ -1,0 +1,68 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo_doit"
+        android:contentDescription="Logo DoIt"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true" />
+
+    <EditText
+        android:id="@+id/inputEmail"
+        android:hint="Correo electrónico"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/black"
+        android:backgroundTint="@color/black"
+        android:layout_below="@id/imgLogo"
+        android:layout_marginTop="20dp"
+        android:inputType="textEmailAddress"/>
+
+    <EditText
+        android:id="@+id/inputPassword"
+        android:hint="Contraseña"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:layout_below="@id/inputEmail"
+        android:textColorHint="@color/black"
+        android:backgroundTint="@color/black"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/inputConfirmPassword"
+        android:hint="Confirmar contraseña"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:layout_below="@id/inputPassword"
+        android:textColorHint="@color/black"
+        android:backgroundTint="@color/black"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrarse"
+        android:layout_below="@id/inputConfirmPassword"
+        android:backgroundTint="@color/azul_oscuro"
+        android:layout_marginTop="55dp"/>
+
+    <Button
+        android:id="@+id/btnGoLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ya tengo cuenta"
+        android:layout_below="@id/btnRegister"
+        android:backgroundTint="@color/rojo"
+        android:layout_marginTop="20dp"/>
+
+</RelativeLayout>

@@ -1,0 +1,109 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- LOGO DE LA APP -->
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo_doit"
+        android:contentDescription="Logo DoIt"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true" />
+
+        <EditText
+            android:id="@+id/inputNombre"
+            android:hint="Nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/rojo"
+            android:textColorHint="@color/black"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/imgLogo"/>
+
+        <EditText
+            android:id="@+id/inputEdad"
+            android:hint="Edad"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColorHint="@color/black"
+            android:backgroundTint="@color/rojo"
+            android:layout_below="@+id/inputNombre"/>
+
+        <EditText
+            android:id="@+id/inputPeso"
+            android:hint="Peso (kg)"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColorHint="@color/black"
+            android:backgroundTint="@color/rojo"
+            android:layout_below="@+id/inputEdad"/>
+
+
+    <EditText
+            android:id="@+id/inputAltura"
+            android:hint="Altura (cm)"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColorHint="@color/black"
+            android:backgroundTint="@color/rojo"
+            android:layout_below="@+id/inputPeso"/>
+
+    <RadioGroup
+        android:id="@+id/groupSexo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputAltura"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <RadioButton
+            android:id="@+id/radioHombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hombre"
+            android:textColor="@color/black"
+            android:buttonTint="@color/rojo"/>
+
+        <RadioButton
+            android:id="@+id/radioMujer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mujer"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/black"
+            android:buttonTint="@color/rojo"/>
+
+        <RadioButton
+            android:id="@+id/radioOtro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Otro"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/black"
+            android:buttonTint="@color/rojo"
+            />
+    </RadioGroup>
+
+
+    <Button
+            android:id="@+id/btnGuardarDatos"
+            android:text="Guardar y continuar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:backgroundTint="@color/rojo"
+            android:layout_below="@+id/groupSexo"/>
+
+</RelativeLayout>

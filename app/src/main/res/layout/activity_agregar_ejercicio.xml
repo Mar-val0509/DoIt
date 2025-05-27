@@ -1,0 +1,83 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".AgregarEjercicioActivity"
+    android:padding="16dp">
+
+    <!-- Imagen seleccionada -->
+    <ImageView
+        android:id="@+id/imgPreview"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        android:background="@color/blanco_roto"
+        android:contentDescription="@string/vista_previa_de_la_imagen" />
+
+    <!-- Botón seleccionar imagen -->
+    <Button
+        android:id="@+id/btnSeleccionarImagen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgPreview"
+        android:layout_marginTop="16dp"
+        android:text="@string/elegir_o_tomar_foto"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/rojo"
+        android:textSize="16sp" />
+
+    <!-- Nombre del ejercicio -->
+    <EditText
+        android:id="@+id/edtNombreEjercicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnSeleccionarImagen"
+        android:layout_marginTop="16dp"
+        android:hint="@string/nombre_del_ejercicio"
+        android:backgroundTint="@color/rojo"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:inputType="textCapWords" />
+
+    <!-- Descripción del ejercicio -->
+    <EditText
+        android:id="@+id/edtDescripcionEjercicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edtNombreEjercicio"
+        android:layout_marginTop="12dp"
+        android:hint="@string/descripci_n"
+        android:backgroundTint="@color/rojo"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:inputType="textMultiLine"
+        android:minLines="3" />
+
+    <!-- Botón guardar -->
+    <Button
+        android:id="@+id/btnGuardarEjercicio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edtDescripcionEjercicio"
+        android:layout_marginTop="20dp"
+        android:text="@string/guardar_ejercicio"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/rojo"
+        android:textSize="16sp" />
+    <Button
+        android:id="@+id/btnCancelarAgregar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cancelar"
+        android:layout_below="@id/btnGuardarEjercicio"
+        android:backgroundTint="@color/gris"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"/>
+
+</RelativeLayout>

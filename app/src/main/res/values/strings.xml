@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">DoIt</string>
+    <string name="vista_previa_de_la_imagen">Vista previa de la imagen</string>
+    <string name="elegir_o_tomar_foto">Elegir o Tomar Foto</string>
+    <string name="nombre_del_ejercicio">Nombre del ejercicio</string>
+    <string name="descripci_n">Descripción</string>
+    <string name="guardar_ejercicio">Guardar Ejercicio</string>
+    <string name="cancelar">Cancelar</string>
+</resources>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1009066487259",
+    "project_id": "doitapp-a400e",
+    "storage_bucket": "doitapp-a400e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009066487259:android:f7eec07cf12d0f8c178bfe",
+        "android_client_info": {
+          "package_name": "com.example.doit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1009066487259-44aku64cj3f8cb2hf830f5sj0ph04sf5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCukbwxzm6Rm7Cp5gl4CoCWlggqkJ1CAPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1009066487259-44aku64cj3f8cb2hf830f5sj0ph04sf5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

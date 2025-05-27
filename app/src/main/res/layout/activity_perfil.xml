@@ -1,0 +1,151 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- CONTENIDO SCROLL -->
+    <ScrollView
+        android:id="@+id/scrollContent"
+        android:layout_above="@id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Icono de usuario -->
+            <ImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/usuario_nav"
+                android:background="@color/rojo"
+                android:layout_marginBottom="24dp" />
+
+            <EditText
+                android:id="@+id/editNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre"
+                android:backgroundTint="@color/rojo"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editEdad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Edad"
+                android:inputType="number"
+                android:textSize="18sp"
+                android:backgroundTint="@color/rojo"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/editPeso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Peso (kg)"
+                android:inputType="numberDecimal"
+                android:textSize="18sp"
+                android:backgroundTint="@color/rojo"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/editAltura"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Altura (cm)"
+                android:inputType="numberDecimal"
+                android:textSize="18sp"
+                android:backgroundTint="@color/rojo"
+                android:layout_marginTop="8dp" />
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/rojo"
+                android:text="Guardar cambios"
+                android:layout_marginTop="24dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="#CCCCCC"
+                android:layout_marginVertical="24dp" />
+
+            <TextView
+                android:id="@+id/txtTotalEntrenos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Entrenamientos hechos:"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/txtEjercicioFavorito"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ejercicio favorito:"
+                android:textSize="18sp"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Menú de navegación inferior -->
+    <LinearLayout
+        android:id="@+id/bottomNav"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#d9272a"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingHorizontal="8dp">
+
+        <ImageView
+            android:id="@+id/navInicio"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/casa_menu"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/navPesas"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pesa_nav"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/navRunning"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/running_nav"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/navPerfil"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/usuario_nav"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/navSalir"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logout_nav"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

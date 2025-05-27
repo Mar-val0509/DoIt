@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/crearRutinaLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="16dp"
+    tools:context=".CrearRutinaActivity">
+
+    <!-- Botón agregar ejercicio -->
+    <ImageView
+        android:id="@+id/btnAgregarEjercicio"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/logo_anadir"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:contentDescription="Agregar ejercicio" />
+
+    <!-- Scroll con los ejercicios -->
+    <ScrollView
+        android:id="@+id/scrollEjercicios"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/btnAgregarEjercicio"
+        android:layout_above="@+id/btnContinuar"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:id="@+id/layoutEjercicios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal" />
+    </ScrollView>
+
+    <!-- Botón de continuar -->
+    <Button
+        android:id="@+id/btnContinuar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continuar"
+        android:textSize="16sp"
+        android:layout_above="@id/btnCancelar"
+        android:backgroundTint="@color/rojo"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/white" />
+
+    <!-- Botón cancelar -->
+    <Button
+        android:id="@+id/btnCancelar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancelar"
+        android:textSize="16sp"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/gris"
+        android:textColor="@color/white"
+        android:layout_marginBottom="8dp" />
+
+</RelativeLayout>

@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="16dp"
+    tools:context=".ResumenRutinaActivity">
+
+    <!-- Scroll con resumen de ejercicios -->
+    <ScrollView
+        android:id="@+id/scrollResumen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/edtNombreRutina"
+        android:layout_marginBottom="12dp">
+
+        <LinearLayout
+            android:id="@+id/layoutResumenEjercicios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <!-- Nombre de la rutina -->
+    <EditText
+        android:id="@+id/edtNombreRutina"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/edtDescripcionRutina"
+        android:layout_marginBottom="12dp"
+        android:hint="Nombre de la rutina"
+        android:backgroundTint="@color/rojo"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black" />
+
+    <!-- Descripción -->
+    <EditText
+        android:id="@+id/edtDescripcionRutina"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnGuardarRutina"
+        android:layout_marginBottom="12dp"
+        android:hint="Descripción (ej. brazos, piernas...)"
+        android:backgroundTint="@color/rojo"
+        android:padding="12dp"
+        android:minLines="3"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black" />
+
+    <!-- Botón guardar -->
+    <Button
+        android:id="@+id/btnGuardarRutina"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnCancelarRutina"
+        android:layout_marginBottom="12dp"
+        android:text="Guardar Rutina"
+        android:textSize="16sp"
+        android:backgroundTint="@color/rojo"
+        android:textColor="@color/white" />
+
+    <!-- Botón cancelar -->
+    <Button
+        android:id="@+id/btnCancelarRutina"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Cancelar"
+        android:textSize="16sp"
+        android:backgroundTint="@color/gris"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

@@ -109,5 +109,5 @@ Este proyecto está bajo la licencia MIT. Puedes usarlo, modificarlo y distribui
 
 ## Contacto
 
-[[E-Mail](mailto:mariogarciamata2005@gmail.com)]  
+mariogarciamata2005@gmail.com  
 [[GitHub](https://github.com/Mar-val0509) o [LinkedIn](https://www.linkedin.com/in/mario-garc%C3%ADa-mata-6493b832a/)]

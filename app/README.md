@@ -32,7 +32,7 @@
 
 - Registro y login con autenticación vía **Firebase Authentication**.
 - Creación y visualización de rutinas personalizadas.
-- Registro de sesiones de carrera (running).
+- Registro de sesiones de carrera con Localización Activa.
 - Guardado de datos localmente usando **SQLite**.
 - Subida y gestión de imágenes del usuario mediante **Firebase Storage**.
 - Vista de perfil y resumen de actividad.
@@ -77,29 +77,27 @@
 
 ## Documentación
 
-[Enlace a la documentación completa del proyecto](#)  
-*(Agrega aquí el enlace si ya está publicada en Notion, web, o como PDF)*
+[Enlace a la documentación completa del proyecto](https://www.notion.so/Trabajo-de-Fin-De-Grado-20915b6a102a80ebbfe3ce4e6005f7e0?source=copy_link)
 
 ---
 
 ## Interfaz (Figma)
 
-[Enlace al prototipo de diseño en Figma](#)  
-*(Agrega aquí el link si hiciste diseño con Figma)*
+[Enlace al prototipo de diseño en Figma](https://www.figma.com/design/yxGWbbMo8j4poKiQoVa0Ds/DoIT?node-id=0-1&t=h7uzYBBGBz9Jqkvo-1)
 
 ---
 
 ## Conclusión
 
-Desarrollar **DoIt** me permitió integrar conocimientos de desarrollo móvil, gestión de bases de datos y servicios en la nube. El proyecto combina práctica técnica con una necesidad real planteada por usuarios activos en el ámbito deportivo.
+Desarrollando **DoIt** he conseguido ampliar mis conocimientos de desarrollo móvil, gestión de bases de datos y servicios en la nube. El proyecto combina práctica técnica con una necesidad real planteada por usuarios activos en el ámbito deportivo.
 
 ---
 
 ## Contribuciones y agradecimientos
 
-- Idea original: Josemanuel
-- Agradecimientos a los profesores y compañeros del ciclo DAM.
-- Recursos usados: Firebase, Android SDK, documentación oficial.
+- Idea original: José Manuel García Perez
+- Agradecimientos a mis profesores del ciclo y a los compañeros y amigos que me tendieron una mano.
+- Recursos usados: Firebase, Android SDK, Figma, Android Developers y Stack Overflow.
 
 ---
 
@@ -111,6 +109,6 @@ Este proyecto está bajo la licencia MIT. Puedes usarlo, modificarlo y distribui
 
 ## Contacto
 
-[[E-Mail](mariogarciamata2005@gmail.com)]  
+[[E-Mail](mailto:mariogarciamata2005@gmail.com)]  
 [[GitHub](https://github.com/Mar-val0509) o [LinkedIn](https://www.linkedin.com/in/mario-garc%C3%ADa-mata-6493b832a/)]
 

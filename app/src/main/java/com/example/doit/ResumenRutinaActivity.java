@@ -1,6 +1,7 @@
 package com.example.doit;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -35,7 +37,6 @@ public class ResumenRutinaActivity extends AppCompatActivity {
         Button btnGuardar = findViewById(R.id.btnGuardarRutina);
         Button btnCancelar = findViewById(R.id.btnCancelarRutina);
         btnCancelar.setOnClickListener(v -> mostrarDialogoConfirmacion());
-
 
         dbHelper = new DoItDBHelper(this);
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -86,17 +87,25 @@ public class ResumenRutinaActivity extends AppCompatActivity {
             Button btnAgregar = card.findViewById(R.id.btnAgregarSerie);
 
             txtNombre.setText(nombres.get(i));
-            btnAgregar.setVisibility(View.GONE); // ocultamos botón de agregar
+            btnAgregar.setVisibility(View.GONE);
 
             String uri = imagenes.get(i);
-            if (uri != null && !uri.isEmpty()) {
-                int resId = getResources().getIdentifier(uri, "drawable", getPackageName());
-                img.setImageResource(resId != 0 ? resId : R.drawable.placeholder);
-            } else {
-                img.setImageResource(R.drawable.placeholder);
-            }
+            cargarImagen(img, uri);
 
             layoutResumen.addView(card);
+        }
+    }
+
+    private void cargarImagen(ImageView img, String uri) {
+        if (uri == null || uri.isEmpty()) {
+            img.setImageResource(R.drawable.placeholder);
+        } else if (uri.startsWith("http")) {
+            Glide.with(this).load(uri).placeholder(R.drawable.placeholder).into(img);
+        } else if (uri.startsWith("content://") || uri.startsWith("file://")) {
+            img.setImageURI(Uri.parse(uri));
+        } else {
+            int resId = getResources().getIdentifier(uri, "drawable", getPackageName());
+            img.setImageResource(resId != 0 ? resId : R.drawable.placeholder);
         }
     }
 

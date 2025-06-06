@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permisos necesarios -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -35,8 +34,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-
-        <!-- Actividad principal -->
         <activity android:name=".LoginActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,7 +41,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Otras actividades -->
         <activity android:name=".RegisterActivity" />
         <activity android:name=".DatosInicialesActivity" />
         <activity android:name=".HomeActivity" />
@@ -53,14 +49,10 @@
         <activity android:name=".RunningActivity" />
         <activity android:name=".RutinaActivity" />
         <activity android:name=".TrakerActivity" />
-
-        <!-- NUEVAS ACTIVIDADES AÑADIDAS -->
         <activity android:name=".AgregarEjercicioActivity" />
         <activity android:name=".CrearRutinaActivity" />
         <activity android:name=".ResumenRutinaActivity" />
         <activity android:name=".HistorialEntrenamientosActivity" />
 
-
     </application>
-
 </manifest>

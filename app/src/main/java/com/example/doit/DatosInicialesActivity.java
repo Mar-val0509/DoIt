@@ -84,8 +84,6 @@ public class DatosInicialesActivity extends AppCompatActivity {
             dbHelper.insertarUsuarioVacio(uid);
         }
 
-        cargarDatosUsuario();
-
         imgPerfil.setOnClickListener(v -> {
             if (tienePermisos()) {
                 mostrarDialogoImagen();
@@ -146,11 +144,11 @@ public class DatosInicialesActivity extends AppCompatActivity {
             if (requestCode == REQUEST_IMAGE_PICK && data != null) {
                 uriSeleccionada = data.getData();
             } else if (requestCode == REQUEST_CAMARA) {
-                uriSeleccionada = imagenUri; // o uriImagenActual, si lo nombras así
+                uriSeleccionada = imagenUri;
             }
 
             if (uriSeleccionada != null) {
-                imagenUri = uriSeleccionada; // guarda temporalmente
+                imagenUri = uriSeleccionada;
                 Glide.with(this).load(imagenUri).into(imgPerfil);
             }
         }
@@ -203,23 +201,6 @@ public class DatosInicialesActivity extends AppCompatActivity {
             Toast.makeText(this, "Datos guardados sin imagen nueva", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, HomeActivity.class));
             finish();
-        }
-    }
-
-    private void cargarDatosUsuario() {
-        Cursor cursor = dbHelper.obtenerDatosUsuario(uid);
-        if (cursor != null && cursor.moveToFirst()) {
-            edtNombre.setText(cursor.getString(cursor.getColumnIndexOrThrow("nombre")));
-            edtEdad.setText(String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow("edad"))));
-            edtPeso.setText(String.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow("peso"))));
-            edtAltura.setText(String.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow("altura"))));
-
-            String sexo = cursor.getString(cursor.getColumnIndexOrThrow("sexo"));
-            if ("Hombre".equals(sexo)) radioHombre.setChecked(true);
-            else if ("Mujer".equals(sexo)) radioMujer.setChecked(true);
-            else radioOtro.setChecked(true);
-
-            cursor.close();
         }
     }
 

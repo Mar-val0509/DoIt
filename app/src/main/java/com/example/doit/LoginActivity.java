@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                 passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 btnTogglePassword.setImageResource(R.drawable.ic_visibility_off);
             }
-            // Mover el cursor al final
+
             passwordInput.setSelection(passwordInput.getText().length());
         });
 
@@ -82,8 +82,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        mAuth = FirebaseAuth.getInstance(); // Asegúrate de tener esto también
-        dbHelper = new DoItDBHelper(this);  // <---- ¡AÑADE ESTA LÍNEA!
+        mAuth = FirebaseAuth.getInstance();
+        dbHelper = new DoItDBHelper(this);
 
         if (mAuth.getCurrentUser() != null) {
             String uid = mAuth.getCurrentUser().getUid();

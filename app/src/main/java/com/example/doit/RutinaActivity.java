@@ -49,7 +49,7 @@ public class RutinaActivity extends AppCompatActivity {
             String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"));
 
             TextView txtCabecera = new TextView(this);
-            txtCabecera.setText(nombre);  // Solo el nombre, sin "Rutina:"
+            txtCabecera.setText(nombre);
             txtCabecera.setTextSize(22);
             txtCabecera.setTextColor(getResources().getColor(R.color.black));
             txtCabecera.setPadding(0, dpToPx(16), 0, dpToPx(12));
@@ -111,7 +111,7 @@ public class RutinaActivity extends AppCompatActivity {
     }
 
     private void guardarSeries() {
-        // 1. Obtener nombre y descripción desde la base de datos mediante cursor
+        //Obtener nombre y descripción desde la base de datos
         Cursor cursor = dbHelper.obtenerRutinaPorId(id_rutina);
         if (cursor == null || !cursor.moveToFirst()) {
             Toast.makeText(this, "Error al recuperar datos de la rutina", Toast.LENGTH_SHORT).show();
@@ -122,10 +122,10 @@ public class RutinaActivity extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String fechaActual = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-        // 2. Insertar registro en entrenamiento_realizado
+        //Insertar registro en entrenamiento_realizado
         long idEntrenamientoRealizado = dbHelper.insertarEntrenamientoRealizado(id_rutina, uid, fechaActual);
 
-        // 3. Guardar series asociadas a los ejercicios
+        //Guardar series asociadas a los ejercicios
         for (Map.Entry<Integer, List<View>> entry : seriesPorEjercicio.entrySet()) {
             int idEjercicio = entry.getKey();
             List<View> series = entry.getValue();
@@ -151,7 +151,6 @@ public class RutinaActivity extends AppCompatActivity {
         Toast.makeText(this, "Entrenamiento guardado", Toast.LENGTH_SHORT).show();
         finish();
     }
-
 
     private int dpToPx(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);

@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
-import java.util.*;
+
 
 public class PesasActivity extends AppCompatActivity {
 
@@ -54,7 +52,6 @@ public class PesasActivity extends AppCompatActivity {
         Cursor cursor = dbHelper.obtenerRutinasPorUsuarioDisplay(uid);
         if (cursor == null || !cursor.moveToFirst()) return;
 
-        // Borra todas las vistas excepto el primer hijo (la tarjeta "Añadir rutina")
         if (layoutRutinas.getChildCount() > 1) {
             layoutRutinas.removeViews(1, layoutRutinas.getChildCount() - 1);
         }
@@ -91,7 +88,6 @@ public class PesasActivity extends AppCompatActivity {
 
         } while (cursor.moveToNext());
 
-        // Añadir última fila si quedó incompleta
         if (fila.getChildCount() > 0) {
             layoutRutinas.addView(fila);
         }
@@ -137,8 +133,6 @@ public class PesasActivity extends AppCompatActivity {
         return tarjeta;
     }
 
-
-
     private int dpToPx(int dp) {
         return Math.round(dp * getResources().getDisplayMetrics().density);
     }
@@ -165,13 +159,9 @@ public class PesasActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Borra solo las rutinas dinámicas, deja el botón
         if (layoutRutinas.getChildCount() > 1) {
             layoutRutinas.removeViews(1, layoutRutinas.getChildCount() - 1);
         }
-
         cargarRutinas();
     }
-
 }

@@ -2,7 +2,6 @@ package com.example.doit;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -31,7 +30,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 public class PerfilActivity extends AppCompatActivity {
 
@@ -72,7 +70,6 @@ public class PerfilActivity extends AppCompatActivity {
 
         setupBottomNav();
         dbHelper = new DoItDBHelper(this);
-// 🔒 Verificación UID
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show();
             finish();
@@ -81,7 +78,6 @@ public class PerfilActivity extends AppCompatActivity {
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // 🔄 Asegurar que el usuario existe
         if (!dbHelper.existeUsuario(uid)) {
             dbHelper.insertarUsuarioVacio(uid);
         }
@@ -219,11 +215,11 @@ public class PerfilActivity extends AppCompatActivity {
             if (requestCode == REQUEST_IMAGE_PICK && data != null) {
                 uriSeleccionada = data.getData();
             } else if (requestCode == REQUEST_CAMARA) {
-                uriSeleccionada = imagenUri; // o uriImagenActual, si lo nombras así
+                uriSeleccionada = imagenUri;
             }
 
             if (uriSeleccionada != null) {
-                imagenUri = uriSeleccionada; // guarda temporalmente
+                imagenUri = uriSeleccionada;
                 Glide.with(this).load(imagenUri).into(imgPerfil);
             }
         }
@@ -254,8 +250,6 @@ public class PerfilActivity extends AppCompatActivity {
     private interface OnImageUploadListener {
         void onSuccess(String url);
     }
-
-
 
     private void setupBottomNav() {
         findViewById(R.id.navInicio).setOnClickListener(v ->

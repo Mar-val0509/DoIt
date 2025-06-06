@@ -119,6 +119,4 @@ public class HistorialEntrenamientosActivity extends AppCompatActivity {
 
         cursorEntrenamientos.close();
     }
-
-
 }

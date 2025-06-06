@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ResumenRutinaActivity extends AppCompatActivity {
@@ -51,7 +50,6 @@ public class ResumenRutinaActivity extends AppCompatActivity {
         mostrarEjerciciosSeleccionados(ejerciciosSeleccionados);
         btnGuardar.setOnClickListener(v -> guardarRutina());
     }
-
 
     private void guardarRutina() {
         String nombreRutina = edtNombreRutina.getText().toString().trim();
@@ -102,8 +100,6 @@ public class ResumenRutinaActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void mostrarDialogoConfirmacion() {
         new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setTitle("¿Cancelar rutina?")
@@ -117,5 +113,4 @@ public class ResumenRutinaActivity extends AppCompatActivity {
                 .setNegativeButton("No", null)
                 .show();
     }
-
 }

@@ -22,7 +22,6 @@ public class HomeActivity extends AppCompatActivity {
     int rutinasCompletadas = 5;
     int diasDescanso = 2;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +33,9 @@ public class HomeActivity extends AppCompatActivity {
         txtRutinas = findViewById(R.id.txtDiasEntreno);
         txtDiasDescanso = findViewById(R.id.txtDiasDescanso);
 
-        // Por ahora contadores de ejemplo
         setupBottomNav();
         actualizarDiasEjercicioYDescanso();
 
-        // Botones grandes
         LinearLayout btnPersonalizado = findViewById(R.id.btnPersonalizado);
         LinearLayout btnExpress = findViewById(R.id.btnExpress);
 
@@ -85,22 +82,22 @@ public class HomeActivity extends AppCompatActivity {
         txtDiasDescanso.setText("Días de descanso: " + diasDescanso);
     }
 
-        private void setupBottomNav() {
-            findViewById(R.id.navPesas).setOnClickListener(v ->
-                    startActivity(new Intent(this, PesasActivity.class)));
+    private void setupBottomNav() {
+        findViewById(R.id.navPesas).setOnClickListener(v ->
+                startActivity(new Intent(this, PesasActivity.class)));
 
-            findViewById(R.id.navRunning).setOnClickListener(v ->
-                    startActivity(new Intent(this, RunningActivity.class)));
+        findViewById(R.id.navRunning).setOnClickListener(v ->
+                startActivity(new Intent(this, RunningActivity.class)));
 
-            findViewById(R.id.navPerfil).setOnClickListener(v ->
-                    startActivity(new Intent(this, PerfilActivity.class)));
+        findViewById(R.id.navPerfil).setOnClickListener(v ->
+                startActivity(new Intent(this, PerfilActivity.class)));
 
-            findViewById(R.id.navSalir).setOnClickListener(v -> {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            });
-        }
+        findViewById(R.id.navSalir).setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
+    }
 }

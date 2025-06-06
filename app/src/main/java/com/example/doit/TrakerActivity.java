@@ -233,7 +233,6 @@ public class TrakerActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public void onBackPressed() {
         if (!isTracking || !isPaused) {

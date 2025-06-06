@@ -129,12 +129,6 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("uid", uid);
-        values.put("nombre", "");
-        values.put("edad", "");
-        values.put("peso", "");
-        values.put("altura", "");
-        values.put("sexo", "");
-        values.put("foto_perfil", "");
         db.insert("usuario", null, values);
         db.close();
     }
@@ -148,7 +142,7 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         values.put("peso", peso);
         values.put("altura", altura);
         values.put("sexo", sexo);
-        values.put("foto_perfil", foto_perfil);  // <-- Aquí también
+        values.put("foto_perfil", foto_perfil);
         db.update("usuario", values, "uid = ?", new String[]{uid});
         db.close();
     }
@@ -207,7 +201,6 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         values.put("id_ejercicio", idEjercicio);
         db.insert("serie_ejercicio", null, values);
     }
-
 
     public void insertarEjercicio(String nombre, String descripcion, String imagenUri) {
         SQLiteDatabase db = getWritableDatabase();
@@ -394,10 +387,10 @@ public class DoItDBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("uid", uid);
         values.put("nombre", nombre);
-        values.put("fecha", ""); // puedes modificar si usas fecha
+        values.put("fecha", "");
         values.put("descripcion", descripcion);
         values.put("tipo", tipo);
-        values.put("duracion", " "); // reutilizando campo "duracion" para la descripción breve
+        values.put("duracion", " ");
         values.put("distancia", 0);
         values.put("velocidad", 0);
         values.put("ritmo", 0);

@@ -1,0 +1,76 @@
+@startuml
+' Diagrama Entidad-Relación (ERD) PRO
+hide circle
+    skinparam classBorderColor Blue
+    skinparam classBackgroundColor White
+    skinparam ArrowColor Red
+
+
+entity USUARIO {
+  * id_usuario : INTEGER <<PK>>
+  --
+  nombre : TEXT
+  edad : INTEGER
+  peso : REAL
+  altura : REAL
+  foto_url : TEXT
+  sexo : TEXT
+  uid : TEXT
+}
+
+entity RUTINA_PERSONALIZADA {
+  * id_rutina : INTEGER <<PK>>
+  --
+  nombre : TEXT
+  descripcion : TEXT
+  imagen : TEXT
+  id_usuario : INTEGER <<FK>>
+}
+
+entity EJERCICIO {
+  * id_ejercicio : INTEGER <<PK>>
+  --
+  nombre : TEXT
+  descripcion : TEXT
+  imagen : TEXT
+}
+
+entity SERIE {
+  * id_serie : INTEGER <<PK>>
+  --
+  id_rutina : INTEGER <<FK>>
+}
+
+entity REPETICION {
+  * id_repeticion : INTEGER <<PK>>
+  --
+  id_serie : INTEGER <<FK>>
+  repeticiones : INTEGER
+  peso : REAL
+}
+
+entity SERIE_EJERCICIO {
+  * id : INTEGER <<PK>>
+  --
+  id_serie : INTEGER <<FK>>
+  id_ejercicio : INTEGER <<FK>>
+}
+
+entity ENTRENAMIENTO_REALIZADO  {
+  * id_entrenamiento : INTEGER <<PK>>
+  --
+  fecha : TEXT
+  tipo : TEXT
+  duracion : REAL
+  distancia : REAL
+  id_usuario : INTEGER <<FK>>
+}
+
+USUARIO ||--o{ RUTINA_PERSONALIZADA
+RUTINA_PERSONALIZADA ||--o{ SERIE
+SERIE ||--o{ REPETICION
+SERIE ||--o{ SERIE_EJERCICIO
+EJERCICIO ||--o{ SERIE_EJERCICIO
+USUARIO ||--o{ ENTRENAMIENTO_REALIZADO
+
+@enduml

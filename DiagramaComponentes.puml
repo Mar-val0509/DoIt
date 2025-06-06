@@ -1,0 +1,87 @@
+@startuml
+' Diagrama de Componentes extendido + ordenado
+
+    skinparam classBorderColor Blue
+    skinparam classBackgroundColor White
+    skinparam ArrowColor Red
+    skinparam componentBackgroundColor White
+    skinparam componentBorderColor Blue
+
+actor Usuario
+
+package "App Android (DoIt)" {
+
+    [LoginActivity]
+    [RegisterActivity]
+    [DatosInicialesActivity]
+    [HomeActivity]
+    [PesasActivity]
+    [RunningActivity]
+    [PerfilActivity]
+    [HistorialEntrenamientosActivity]
+    [CrearRutinaActivity]
+    [AgregarEjercicioActivity]
+    [ResumenRutinaActivity]
+    [RutinaActivity]
+    [TrakerActivity]
+
+}
+
+package "Capa de Persistencia" {
+    component [DoItDBHelper]
+    database SQLite
+    [DoItDBHelper] --> SQLite
+}
+
+package "Servicios Externos" {
+    component [FirebaseAuth]
+    component [Firebase Storage]
+}
+
+' Relaciones Usuario → App (en el mismo orden que pediste)
+Usuario --> [LoginActivity]
+Usuario --> [RegisterActivity]
+Usuario --> [DatosInicialesActivity]
+Usuario --> [HomeActivity]
+Usuario --> [PesasActivity]
+Usuario --> [RunningActivity]
+Usuario --> [PerfilActivity]
+Usuario --> [HistorialEntrenamientosActivity]
+Usuario --> [CrearRutinaActivity]
+Usuario --> [AgregarEjercicioActivity]
+Usuario --> [ResumenRutinaActivity]
+Usuario --> [RutinaActivity]
+Usuario --> [TrakerActivity]
+
+' Relaciones de componentes (en el mismo orden también)
+[LoginActivity] --> [FirebaseAuth]
+[LoginActivity] --> [DoItDBHelper]
+
+[RegisterActivity] --> [FirebaseAuth]
+
+[DatosInicialesActivity] --> [DoItDBHelper]
+[DatosInicialesActivity] --> [Firebase Storage]
+
+[HomeActivity] --> [DoItDBHelper]
+
+[PesasActivity] --> [DoItDBHelper]
+
+[RunningActivity] --> [DoItDBHelper]
+
+[PerfilActivity] --> [DoItDBHelper]
+[PerfilActivity] --> [Firebase Storage]
+
+[HistorialEntrenamientosActivity] --> [DoItDBHelper]
+
+[CrearRutinaActivity] --> [DoItDBHelper]
+
+[AgregarEjercicioActivity] --> [DoItDBHelper]
+[AgregarEjercicioActivity] --> [Firebase Storage]
+
+[ResumenRutinaActivity] --> [DoItDBHelper]
+
+[RutinaActivity] --> [DoItDBHelper]
+
+[TrakerActivity] --> [DoItDBHelper]
+
+@enduml

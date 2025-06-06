@@ -1,0 +1,249 @@
+@startuml
+' Configuración visual básica
+skinparam classFontSize 14
+skinparam classBorderColor Blue
+skinparam classBackgroundColor White
+skinparam ArrowColor Red
+skinparam backgroundColor Whit
+class AgregarEjercicioActivity extends AppCompatActivity {
+    - ImageView imageView
+    - Uri imagenUri
+    - DoItDBHelper dbHelper
+    {static} - int REQUEST_IMAGE_PICK
+    {static} - int REQUEST_CAMARA
+    {static} - int REQUEST_PERMISOS
+    .. Methods ..
+    # void onCreate(Bundle)
+    - void guardarEjercicio()
+    - void subirImagenAFirebase(Uri, OnImageUploadListener)
+    - void mostrarDialogoImagen()
+    - void tomarFoto()
+    - File crearArchivoTemporal()
+    - void seleccionarImagen()
+    # void onActivityResult(int, int, Intent)
+    - boolean tienePermisos()
+    - void solicitarPermisos()
+    + void onRequestPermissionsResult(int, String[], int[])
+}
+class CrearRutinaActivity extends AppCompatActivity {
+    - LinearLayout layoutEjercicios
+    - Set<Integer> ejerciciosSeleccionados
+    - DoItDBHelper dbHelper
+    - String uid
+    .. Methods ..
+    # void onCreate(Bundle)
+    - void cargarEjerciciosDisponibles()
+    - View crearCardEjercicio(int, String, String, String)
+    - void irAResumenRutina()
+    - void mostrarDialogoCancelar()
+    # void onResume()
+}
+class DatosInicialesActivity extends AppCompatActivity {
+    - RadioGroup radioGroupSexo
+    - ImageView imgPerfil
+    - Button btnGuardar
+    - Uri imagenUri
+    - String fotoPerfilUrl
+    - DoItDBHelper dbHelper
+    - String uid
+    {static} - int REQUEST_IMAGE_PICK
+    {static} - int REQUEST_CAMARA
+    {static} - int REQUEST_PERMISOS
+    .. Methods ..
+    # void onCreate(Bundle)
+    - void mostrarDialogoImagen()
+    - void tomarFoto()
+    - File crearArchivoTemporal()
+    - void seleccionarImagen()
+    # void onActivityResult(int, int, Intent)
+    - void subirImagenAFirebase(Uri, OnImageUploadListener)
+    - void guardarDatosPerfil()
+    - boolean tienePermisos()
+    - void solicitarPermisos()
+    + void onRequestPermissionsResult(int, String[], int[])
+}
+class DoItDBHelper extends SQLiteOpenHelper {
+    {static} - String DB_NAME
+    {static} - int DB_VERSION
+    .. Methods ..
+    + void onCreate(SQLiteDatabase)
+    + void onUpgrade(SQLiteDatabase, int, int)
+    + Cursor obtenerDatosUsuario(String)
+    + void insertarUsuarioVacio(String)
+    + void actualizarUsuario(String, String, int, double, double, String, String)
+    + boolean existeUsuario(String)
+    + void guardarEntrenamiento(String, String, String, String, double, double, double)
+    + Cursor obtenerRutinaPorId(int)
+    + long insertarSerie(int)
+    + void insertarRepeticion(long, int, float, float)
+    + void insertarSerieEjercicio(long, long)
+    + void insertarEjercicio(String, String, String)
+    + Cursor obtenerTodosLosEjercicios()
+    + Cursor obtenerEjerciciosDeRutina(int)
+    + Cursor obtenerRutinasPorUsuarioDisplay(String)
+    + Cursor obtenerEntrenamientoAleatorio(String)
+    + Cursor obtenerEntrenamientosRealizados(String)
+    + int contarDiasEjercicio(String)
+    + String obtenerFechaMasAntigua(String)
+    + List<Integer> obtenerIdsSeriesPorEntrenamiento(int)
+    + Cursor obtenerEjercicioPorSerie(int)
+    + Cursor obtenerRepeticionesPorSerie(int)
+    + List<String> obtenerNombresEjerciciosPorIds(List<Integer>)
+    + List<String> obtenerImagenesPorIds(List<Integer>)
+    + int insertarSerieParaEntrenamiento(int)
+    + long insertarEntrenamientoRealizado(int, String, String)
+    + void insertarEjercicioEnSerie(int, int)
+    + long insertarRutinaPersonalizada(String, String, String, String)
+    + String obtenerFraseAleatoria()
+}
+class HistorialEntrenamientosActivity extends AppCompatActivity {
+    - LinearLayout layoutEntrenamientos
+    - DoItDBHelper dbHelper
+    - String uid
+    .. Methods ..
+    # void onCreate(Bundle)
+    - void cargarHistorialEntrenamientos()
+}
+class HomeActivity extends AppCompatActivity {
+    - DoItDBHelper dbHelper
+    - String uid
+    .. Methods ..
+    # void onCreate(Bundle)
+    - void actualizarDiasEjercicioYDescanso()
+    - void setupBottomNav()
+}
+class LoginActivity extends AppCompatActivity {
+    - FirebaseAuth mAuth
+    - DoItDBHelper dbHelper
+    .. Methods ..
+    # void onCreate(Bundle)
+    # void onStart()
+}
+class PerfilActivity extends AppCompatActivity {
+    - RadioGroup radioGroupSexo
+    - ImageView imgPerfil
+    - Button btnGuardar
+    - Uri imagenUri
+    - String fotoPerfilUrl
+    - DoItDBHelper dbHelper
+    - String uid
+    {static} - int REQUEST_IMAGE_PICK
+    {static} - int REQUEST_CAMARA
+    {static} - int REQUEST_PERMISOS
+    .. Methods ..
+    # void onCreate(Bundle)
+    - void subirImagenAFirebase(Uri, OnImageUploadListener)
+    - void guardarDatosPerfil()
+    - void cargarDatosUsuario()
+    - void mostrarDialogoImagen()
+    - void tomarFoto()
+    - File crearArchivoTemporal()
+    - void seleccionarImagen()
+    # void onActivityResult(int, int, Intent)
+    - boolean tienePermisos()
+    - void solicitarPermisos()
+    + void onRequestPermissionsResult(int, String[], int[])
+    - void setupBottomNav()
+}
+class PesasActivity extends AppCompatActivity {
+    - LinearLayout layoutRutinas
+    - DoItDBHelper dbHelper
+    - String uid
+    .. Methods ..
+    # void onCreate(Bundle)
+    - void setupHeader()
+    - void cargarRutinas()
+    - LinearLayout crearTarjetaRutina(int, String, String)
+    - int dpToPx(int)
+    - void setupBottomNav()
+    # void onResume()
+}
+class RegisterActivity extends AppCompatActivity {
+    - FirebaseAuth mAuth
+    .. Methods ..
+    # void onCreate(Bundle)
+    + void onClick(View)
+    + void onClick(View)
+}
+class ResumenRutinaActivity extends AppCompatActivity {
+    - LinearLayout layoutResumen
+    - List<Integer> ejerciciosSeleccionados
+    - DoItDBHelper dbHelper
+    - String uid
+    .. Methods ..
+    # void onCreate(Bundle)
+    - void guardarRutina()
+    - void mostrarEjerciciosSeleccionados(List<Integer>)
+    - void mostrarDialogoConfirmacion()
+}
+class RunningActivity extends AppCompatActivity {
+    - LinearLayout layoutUltimos
+    - DoItDBHelper dbHelper
+    - String uid
+    .. Methods ..
+    # void onCreate(Bundle)
+    - void cargarEstadisticas()
+    - void cargarUltimosEntrenamientos()
+    - void setupBottomNav()
+}
+class RutinaActivity extends AppCompatActivity {
+    - LinearLayout layoutEjercicios
+    - Button btnGuardarTodo
+    - DoItDBHelper dbHelper
+    - int id_rutina
+    .. Methods ..
+    # void onCreate(Bundle)
+    - void agregarCabecera()
+    - void cargarEjerciciosDeRutina()
+    - void cargarImagen(ImageView, String)
+    - void guardarSeries()
+    - int dpToPx(int)
+}
+class TrakerActivity extends AppCompatActivity {
+    - FusedLocationProviderClient fusedLocationClient
+    - LocationCallback locationCallback
+    - long startTime
+    - long pauseOffset
+    - boolean isTracking
+    - boolean isPaused
+    - double totalDistance
+    - Handler chronoHandler
+    - Runnable chronoRunnable
+    {static} - int LOCATION_PERMISSION_REQUEST_CODE
+    - DoItDBHelper dbHelper
+    - String uid
+    .. Methods ..
+    # void onCreate(Bundle)
+    + void onTick(long)
+    + void onFinish()
+    - void startTracking()
+    - void stopTracking()
+    - void togglePause()
+    - void startChrono()
+    + void run()
+    - void startLocationUpdates()
+    + void onLocationResult(LocationResult)
+    - void stopLocationUpdates()
+    + void onRequestPermissionsResult(int, String[], int[])
+    + void onBackPressed()
+}
+
+
+AgregarEjercicioActivity *-- DoItDBHelper
+CrearRutinaActivity *-- DoItDBHelper
+DatosInicialesActivity *-- DoItDBHelper
+HistorialEntrenamientosActivity *-- DoItDBHelper
+HomeActivity *-- DoItDBHelper
+LoginActivity *-- DoItDBHelper
+PerfilActivity *-- DoItDBHelper
+PesasActivity *-- DoItDBHelper
+ResumenRutinaActivity *-- DoItDBHelper
+RunningActivity *-- DoItDBHelper
+RutinaActivity *-- DoItDBHelper
+TrakerActivity *-- DoItDBHelper
+legend right
+  <b>Relaciones</b>
+  <|--  : herencia
+  *--   : composición (uso de DoItDBHelper)
+endlegend
+@enduml

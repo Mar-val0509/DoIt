@@ -107,6 +107,11 @@ public class TrakerActivity extends AppCompatActivity {
     }
 
     private void startTracking() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            return;
+        }
+
         if (isTracking) return;
 
         isTracking = true;
@@ -221,17 +226,19 @@ public class TrakerActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1001) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permiso concedido
+                // Permiso concedido → iniciar tracking ahora sí
+                startTracking();
             } else {
-                Toast.makeText(this, "Permiso de ubicación requerido para registrar la carrera", Toast.LENGTH_LONG).show();
+                // Permiso denegado → mostrar aviso
+                Toast.makeText(this, "El permiso de ubicación son necesarios.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
 
     @Override
     public void onBackPressed() {
